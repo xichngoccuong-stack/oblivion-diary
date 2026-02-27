@@ -132,6 +132,7 @@
              p.style.cursor = 'pointer';
              p.style.fontFamily = "'Shalimar', cursive";
              p.style.fontSize = '24px';
+             p.dataset.index = index;
              if (albumName === 'Nhạc Trung') {
                  p.style.fontFamily = "'Ma Shan Zheng', sans-serif";
              }
@@ -144,6 +145,10 @@
                  document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
                  document.getElementById('play-btn').style.display = 'none';
                  document.getElementById('controls').style.display = 'block';
+                 // Highlight playing song
+                 const allP = document.querySelectorAll('#audio-items p');
+                 allP.forEach(p => p.classList.remove('playing'));
+                 p.classList.add('playing');
              };
              audioItems.appendChild(p);
              index++;
@@ -199,6 +204,11 @@
    document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
    document.getElementById('play-btn').style.display = 'none';
    document.getElementById('controls').style.display = 'block';
+   // Highlight playing song
+   const allP = document.querySelectorAll('#audio-items p');
+   allP.forEach(p => p.classList.remove('playing'));
+   const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
+   if (currentP) currentP.classList.add('playing');
  }
  
  function formatTime(seconds) {
@@ -248,6 +258,8 @@
          seekBar.value = (audio.currentTime / audio.duration) * 100;
          currentTimeSpan.textContent = formatTime(audio.currentTime);
          durationSpan.textContent = formatTime(audio.duration);
+         const percentage = (audio.currentTime / audio.duration) * 100;
+         seekBar.style.background = `linear-gradient(to right, rgba(255, 0, 0, 0.8) 0%, rgba(255, 0, 0, 0.8) ${percentage}%, rgba(255, 255, 255, 0.5) ${percentage}%, rgba(255, 255, 255, 0.5) 100%)`;
        }
      };
      document.getElementById('audio').onended = () => {

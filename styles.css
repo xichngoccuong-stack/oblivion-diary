@@ -92,3 +92,49 @@ button {
     z-index: 10000;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
+
+.playing {
+    background-color: rgba(255, 0, 0, 0.5);
+    color: white;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+#seek-bar {
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(0, 255, 0, 0.2);
+    height: 5px;
+    border-radius: 5px;
+}
+
+#seek-bar::-webkit-slider-track {
+    background: transparent;
+    height: 5px;
+    border-radius: 5px;
+}
+
+#seek-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ff0000;
+    cursor: pointer;
+}
+
+#seek-bar::-moz-range-track {
+    background: transparent;
+    height: 5px;
+    border-radius: 5px;
+}
+
+#seek-bar::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ff0000;
+    cursor: pointer;
+    border: none;
+}
