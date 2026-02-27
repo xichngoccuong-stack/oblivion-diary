@@ -125,6 +125,7 @@
          let index = 0;
          docs.forEach(doc => {
              const data = doc.data();
+             data.albumName = albumName;
              currentSongList.push(data);
              const p = document.createElement('p');
              p.textContent = data.name.replace('.mp3', '');
@@ -185,8 +186,8 @@
  }
 
  function toggleUploadForm() {
-     const form = document.getElementById('upload-form');
-     form.style.display = form.style.display === 'none' ? 'block' : 'none';
+   const modal = document.getElementById('upload-modal');
+   modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
  }
 
  // Make functions global
@@ -202,6 +203,11 @@
    document.getElementById('play-pause-btn').textContent = 'Pause';
    document.getElementById('song-name').style.display = 'block';
    document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
+   if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
+     document.getElementById('song-name').style.fontFamily = "'Ma Shan Zheng', sans-serif";
+   } else {
+     document.getElementById('song-name').style.fontFamily = "'Shalimar', cursive";
+   }
    document.getElementById('play-btn').style.display = 'none';
    document.getElementById('controls').style.display = 'block';
    // Highlight playing song
