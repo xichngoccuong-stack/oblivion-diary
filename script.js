@@ -192,7 +192,7 @@
    const data = currentSongList[currentIndex];
    document.getElementById('audio').src = data.url;
    document.getElementById('audio').play();
-   document.getElementById('play-pause-btn').textContent = 'Pause';
+   document.getElementById('play-pause-btn').textContent = '❚❚';
    document.getElementById('song-name').style.display = 'block';
    document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
    if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
@@ -280,10 +280,10 @@
      const audio = document.getElementById('audio');
      if (audio.paused) {
        audio.play();
-       document.getElementById('play-pause-btn').textContent = 'Pause';
+       document.getElementById('play-pause-btn').textContent = '❚❚';
      } else {
        audio.pause();
-       document.getElementById('play-pause-btn').textContent = 'Play';
+       document.getElementById('play-pause-btn').textContent = '▶';
      }
    };
    document.getElementById('seek-bar').oninput = (e) => {

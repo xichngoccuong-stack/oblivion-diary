@@ -96,6 +96,15 @@ button {
     background: rgba(255, 255, 255, 0.7);
 }
 
+#controls {
+    background: transparent;
+    color: white;
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid white;
+    z-index: 1;
+}
+
 #play-btn {
     z-index: 1;
 }
