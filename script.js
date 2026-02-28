@@ -1,4 +1,3 @@
- // Firebase configuration
  const firebaseConfig = {
      apiKey: "AIzaSyCEU_hkazFaQ47eBcWglU0QZr5N4i_XPFk",
      authDomain: "eng-vocab-website.firebaseapp.com",
@@ -8,14 +7,12 @@
      appId: "1:669746577120:web:494b943ef1319ce4d69a85",
      measurementId: "G-DHBPC5RL89"
  };
- 
- // Initialize Firebase
+
  firebase.initializeApp(firebaseConfig);
  const db = firebase.firestore();
  let currentSongList = [];
  let currentIndex = -1;
- 
- // Cloudinary configuration
+
  const cloudName = 'dglxrlydv';
  const uploadPreset = 'vocab_images';
 
@@ -38,7 +35,6 @@
      }
  }
 
-
  async function uploadFile() {
      const file = document.getElementById('file-input').files[0];
      const album = document.getElementById('album-select').value;
@@ -59,11 +55,9 @@
          const data = await response.json();
          const url = data.secure_url;
          const name = file.name;
-         // Add to Firebase
          await db.collection('music').add({ name, url, album });
          document.getElementById('overlay').style.display = 'none';
          showNotification('Upload successful: ' + name);
-         // Reload list
          loadAlbumList();
      } catch (error) {
          document.getElementById('overlay').style.display = 'none';
@@ -146,7 +140,6 @@
                  document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
                  document.getElementById('play-btn').style.display = 'none';
                  document.getElementById('controls').style.display = 'block';
-                 // Highlight playing song
                  const allP = document.querySelectorAll('#audio-items p');
                  allP.forEach(p => p.classList.remove('playing'));
                  p.classList.add('playing');
@@ -190,7 +183,6 @@
    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
  }
 
- // Make functions global
  window.playAudio = playAudio;
  window.uploadFile = uploadFile;
  window.toggleUploadForm = toggleUploadForm;
@@ -210,7 +202,6 @@
    }
    document.getElementById('play-btn').style.display = 'none';
    document.getElementById('controls').style.display = 'block';
-   // Highlight playing song
    const allP = document.querySelectorAll('#audio-items p');
    allP.forEach(p => p.classList.remove('playing'));
    const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
@@ -223,11 +214,38 @@
    return `${min}:${sec.toString().padStart(2, '0')}`;
  }
 
- // Load album list on page load
+ const backgroundImages = [
+     'background/1.jpg',
+     'background/2.jpg',
+     'background/3.jpg',
+     'background/4.jpg'
+ ];
+ let currentBackgroundIndex = 0;
+ let currentBg = 1;
+ function changeBackground() {
+     const nextBg = currentBg === 1 ? 2 : 1;
+     const nextDiv = document.getElementById('background' + nextBg);
+     nextDiv.style.backgroundImage = `url('${backgroundImages[currentBackgroundIndex]}')`;
+     nextDiv.style.zIndex = '0';
+     nextDiv.style.transform = 'translateX(100%)';
+     setTimeout(() => {
+         nextDiv.style.transform = 'translateX(0%)';
+         document.getElementById('background' + currentBg).style.zIndex = '-1';
+     }, 0);
+     document.getElementById('background' + currentBg).style.transform = 'translateX(-100%)';
+     setTimeout(() => {
+         document.getElementById('background' + currentBg).style.backgroundImage = '';
+         document.getElementById('background' + currentBg).style.transform = 'translateX(100%)';
+         currentBg = nextBg;
+         nextDiv.style.zIndex = '-1';
+     }, 3000);
+     currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
+ }
  window.onload = function() {
+     changeBackground();
+     setInterval(changeBackground, 10000);
      loadAlbums();
      loadAlbumList();
-     // Add event listeners for controls
      document.getElementById('prev-btn').onclick = () => {
        if (currentIndex > 0) {
          currentIndex--;
