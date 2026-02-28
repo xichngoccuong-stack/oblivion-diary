@@ -30,7 +30,25 @@
         <button onclick="uploadFile()" style="margin: 10px; color: white; background: #007bff; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">Upload</button>
       </div>
     </div>
-    <button onclick="toggleUploadForm()" style="position: absolute; top: 70px; right: 10px; background: transparent; border: none; font-size: 24px; cursor: pointer;">☰</button>
+    <div id="manage-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;" onclick="toggleManageModal()">
+      <div id="manage-form" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(135deg, #f5f7fa, #c3cfe2); color: #333; padding: 30px; border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; font-size: 18px; font-family: 'Arial', sans-serif;" onclick="event.stopPropagation()">
+        <button style="position: absolute; top: 10px; right: 10px; background: #ff6b6b; border: none; color: white; font-size: 18px; cursor: pointer; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;" onclick="toggleManageModal()">&times;</button>
+        <h2 style="margin: 0 0 20px 0; color: #333;">Quản lý bài hát</h2>
+        <select id="song-select" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
+          <option value="">Chọn bài hát</option>
+        </select>
+        <input type="text" id="new-song-name" placeholder="Tên mới cho bài hát" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
+        <select id="album-move-select" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
+          <option value="">Chọn album để di chuyển (tùy chọn)</option>
+        </select>
+        <button onclick="saveSongChanges()" style="margin: 10px; color: white; background: #28a745; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">Lưu thay đổi</button>
+      </div>
+    </div>
+    <button onclick="toggleFunctionMenu()" style="position: absolute; top: 70px; right: 10px; background: transparent; border: none; font-size: 24px; cursor: pointer;">☰</button>
+    <div id="function-menu" style="display: none; position: absolute; top: 110px; right: 10px; background: rgba(0,0,0,0.8); color: white; border: 2px solid white; border-radius: 5px; padding: 10px; z-index: 1000;">
+      <p onclick="toggleUploadForm()" style="margin: 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Add track/Create album</p>
+      <p onclick="toggleManageModal()" style="margin: 5px 0 0 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Track management</p>
+    </div>
     <div id="album-list" style="background: transparent; color: white; padding: 10px; margin: 80px 10px 10px 10px; border: 2px solid white;">
       <h3 style="font-family: 'Shalimar', cursive; font-size: 24px;">Danh Sách Album</h3>
       <div id="album-items"></div>

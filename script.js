@@ -185,10 +185,96 @@
    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
  }
 
+ function toggleFunctionMenu() {
+   const menu = document.getElementById('function-menu');
+   menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+ }
+
+ function toggleManageModal() {
+   const modal = document.getElementById('manage-modal');
+   modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+   if (modal.style.display === 'block') {
+     loadSongsForManage();
+     loadAlbumsForManage();
+   }
+ }
+
+ async function loadSongsForManage() {
+   try {
+     const snapshot = await db.collection('music').get();
+     const select = document.getElementById('song-select');
+     select.innerHTML = '<option value="">Chọn bài hát</option>';
+     snapshot.forEach(doc => {
+       const data = doc.data();
+       const option = document.createElement('option');
+       option.value = doc.id;
+       option.textContent = data.name.replace('.mp3', '');
+       select.appendChild(option);
+     });
+   } catch (error) {
+     console.error('Load songs for manage failed:', error);
+   }
+ }
+
+ async function loadAlbumsForManage() {
+   try {
+     const snapshot = await db.collection('albums').get();
+     const select = document.getElementById('album-move-select');
+     select.innerHTML = '<option value="">Chọn album để di chuyển (tùy chọn)</option>';
+     snapshot.forEach(doc => {
+       const data = doc.data();
+       const option = document.createElement('option');
+       option.value = doc.id;
+       option.textContent = data.name;
+       select.appendChild(option);
+     });
+   } catch (error) {
+     console.error('Load albums for manage failed:', error);
+   }
+ }
+
+ async function saveSongChanges() {
+   const songId = document.getElementById('song-select').value;
+   const newName = document.getElementById('new-song-name').value.trim();
+   const newAlbum = document.getElementById('album-move-select').value;
+   if (!songId) {
+     alert('Vui lòng chọn bài hát');
+     return;
+   }
+   const updateData = {};
+   if (newName) {
+     updateData.name = newName + '.mp3';
+   }
+   if (newAlbum) {
+     updateData.album = newAlbum;
+   }
+   if (Object.keys(updateData).length === 0) {
+     alert('Không có thay đổi nào');
+     return;
+   }
+   try {
+     await db.collection('music').doc(songId).update(updateData);
+     showNotification('Cập nhật thành công');
+     toggleManageModal();
+     loadAlbumList();
+     if (newAlbum) {
+       loadAlbums();
+     }
+   } catch (error) {
+     console.error('Update song failed:', error);
+     alert('Cập nhật thất bại');
+   }
+ }
+
  window.playAudio = playAudio;
  window.uploadFile = uploadFile;
  window.toggleUploadForm = toggleUploadForm;
+ window.toggleFunctionMenu = toggleFunctionMenu;
  window.createAlbum = createAlbum;
+ window.toggleManageModal = toggleManageModal;
+ window.loadSongsForManage = loadSongsForManage;
+ window.loadAlbumsForManage = loadAlbumsForManage;
+ window.saveSongChanges = saveSongChanges;
  
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
