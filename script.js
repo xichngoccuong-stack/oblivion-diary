@@ -266,6 +266,27 @@
    }
  }
 
+ async function deleteSong() {
+   const songId = document.getElementById('song-select').value;
+   if (!songId) {
+     alert('Vui lòng chọn bài hát để xóa');
+     return;
+   }
+   const confirmDelete = confirm('Bạn có chắc chắn muốn xóa bài hát này?');
+   if (!confirmDelete) {
+     return;
+   }
+   try {
+     await db.collection('music').doc(songId).delete();
+     showNotification('Xóa bài hát thành công');
+     toggleManageModal();
+     loadAlbumList();
+   } catch (error) {
+     console.error('Delete song failed:', error);
+     alert('Xóa bài hát thất bại');
+   }
+ }
+
  window.playAudio = playAudio;
  window.uploadFile = uploadFile;
  window.toggleUploadForm = toggleUploadForm;
@@ -275,6 +296,7 @@
  window.loadSongsForManage = loadSongsForManage;
  window.loadAlbumsForManage = loadAlbumsForManage;
  window.saveSongChanges = saveSongChanges;
+ window.deleteSong = deleteSong;
  
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
