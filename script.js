@@ -222,6 +222,15 @@
  ];
  let currentBackgroundIndex = 0;
  let currentBg = 1;
+ function preloadImage(src) {
+   return new Promise((resolve, reject) => {
+     const img = new Image();
+     img.onload = resolve;
+     img.onerror = reject;
+     img.src = src;
+   });
+ }
+ 
  function changeBackground() {
      const nextBg = currentBg === 1 ? 2 : 1;
      const nextDiv = document.getElementById('background' + nextBg);
@@ -242,54 +251,56 @@
      currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
  }
  window.onload = function() {
+   loadAlbums();
+   loadAlbumList();
+   Promise.all(backgroundImages.map(preloadImage)).then(() => {
      changeBackground();
      setInterval(changeBackground, 10000);
-     loadAlbums();
-     loadAlbumList();
-     document.getElementById('prev-btn').onclick = () => {
-       if (currentIndex > 0) {
-         currentIndex--;
-         playCurrentSong();
-       }
-     };
-     document.getElementById('next-btn').onclick = () => {
-       if (currentIndex < currentSongList.length - 1) {
-         currentIndex++;
-         playCurrentSong();
-       }
-     };
-     document.getElementById('play-pause-btn').onclick = () => {
-       const audio = document.getElementById('audio');
-       if (audio.paused) {
-         audio.play();
-         document.getElementById('play-pause-btn').textContent = 'Pause';
-       } else {
-         audio.pause();
-         document.getElementById('play-pause-btn').textContent = 'Play';
-       }
-     };
-     document.getElementById('seek-bar').oninput = (e) => {
-       const audio = document.getElementById('audio');
-       const seekTo = (e.target.value / 100) * audio.duration;
-       audio.currentTime = seekTo;
-     };
-     document.getElementById('audio').ontimeupdate = () => {
-       const audio = document.getElementById('audio');
-       const seekBar = document.getElementById('seek-bar');
-       const currentTimeSpan = document.getElementById('current-time');
-       const durationSpan = document.getElementById('duration');
-       if (audio.duration) {
-         seekBar.value = (audio.currentTime / audio.duration) * 100;
-         currentTimeSpan.textContent = formatTime(audio.currentTime);
-         durationSpan.textContent = formatTime(audio.duration);
-         const percentage = (audio.currentTime / audio.duration) * 100;
-         seekBar.style.background = `linear-gradient(to right, rgba(255, 0, 0, 0.8) 0%, rgba(255, 0, 0, 0.8) ${percentage}%, rgba(255, 255, 255, 0.5) ${percentage}%, rgba(255, 255, 255, 0.5) 100%)`;
-       }
-     };
-     document.getElementById('audio').onended = () => {
-       if (currentIndex < currentSongList.length - 1) {
-         currentIndex++;
-         playCurrentSong();
-       }
-     };
+   });
+   document.getElementById('prev-btn').onclick = () => {
+     if (currentIndex > 0) {
+       currentIndex--;
+       playCurrentSong();
+     }
+   };
+   document.getElementById('next-btn').onclick = () => {
+     if (currentIndex < currentSongList.length - 1) {
+       currentIndex++;
+       playCurrentSong();
+     }
+   };
+   document.getElementById('play-pause-btn').onclick = () => {
+     const audio = document.getElementById('audio');
+     if (audio.paused) {
+       audio.play();
+       document.getElementById('play-pause-btn').textContent = 'Pause';
+     } else {
+       audio.pause();
+       document.getElementById('play-pause-btn').textContent = 'Play';
+     }
+   };
+   document.getElementById('seek-bar').oninput = (e) => {
+     const audio = document.getElementById('audio');
+     const seekTo = (e.target.value / 100) * audio.duration;
+     audio.currentTime = seekTo;
+   };
+   document.getElementById('audio').ontimeupdate = () => {
+     const audio = document.getElementById('audio');
+     const seekBar = document.getElementById('seek-bar');
+     const currentTimeSpan = document.getElementById('current-time');
+     const durationSpan = document.getElementById('duration');
+     if (audio.duration) {
+       seekBar.value = (audio.currentTime / audio.duration) * 100;
+       currentTimeSpan.textContent = formatTime(audio.currentTime);
+       durationSpan.textContent = formatTime(audio.duration);
+       const percentage = (audio.currentTime / audio.duration) * 100;
+       seekBar.style.background = `linear-gradient(to right, rgba(255, 0, 0, 0.8) 0%, rgba(255, 0, 0, 0.8) ${percentage}%, rgba(255, 255, 255, 0.5) ${percentage}%, rgba(255, 255, 255, 0.5) 100%)`;
+     }
+   };
+   document.getElementById('audio').onended = () => {
+     if (currentIndex < currentSongList.length - 1) {
+       currentIndex++;
+       playCurrentSong();
+     }
+   };
  };
