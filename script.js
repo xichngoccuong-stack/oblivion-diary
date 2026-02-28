@@ -32,7 +32,7 @@
          document.getElementById('song-name').style.display = 'block';
          document.getElementById('play-btn').style.display = 'none';
      } catch (e) {
-         console.log('Autoplay blocked: ' + e.message);
+         console.error('Autoplay blocked: ' + e.message);
      }
  }
 
@@ -140,7 +140,6 @@
                  document.getElementById('audio').play();
                  document.getElementById('song-name').style.display = 'block';
                  document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
-                 console.log('Playing song:', data.name.replace('.mp3', ''), 'at index:', currentIndex);
                  document.getElementById('play-btn').style.display = 'none';
                  document.getElementById('controls').style.display = 'block';
                  const allP = document.querySelectorAll('#audio-items p');
@@ -198,7 +197,6 @@
    document.getElementById('play-pause-btn').textContent = '❚❚';
    document.getElementById('song-name').style.display = 'block';
    document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
-   console.log('Playing song:', data.name.replace('.mp3', ''), 'at index:', currentIndex);
    if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
      document.getElementById('song-name').style.fontFamily = "'Ma Shan Zheng', sans-serif";
    } else {
@@ -296,7 +294,13 @@
    };
    document.getElementById('repeat-btn').onclick = () => {
      isRepeatMode = !isRepeatMode;
-     document.getElementById('repeat-btn').style.color = isRepeatMode ? 'red' : '';
+     if (isRepeatMode) {
+       document.getElementById('repeat-btn').style.color = 'orange';
+       document.getElementById('repeat-btn').style.fontWeight = 'bold';
+     } else {
+       document.getElementById('repeat-btn').style.color = '';
+       document.getElementById('repeat-btn').style.fontWeight = 'normal';
+     }
    };
    document.getElementById('seek-bar').oninput = (e) => {
      const audio = document.getElementById('audio');
