@@ -132,12 +132,14 @@
                  p.style.fontFamily = "'Ma Shan Zheng', sans-serif";
              }
              p.onclick = () => {
-                 currentIndex = index;
+                 const songName = data.name;
+                 currentIndex = currentSongList.findIndex(song => song.name === songName);
                  document.getElementById('audio').src = data.url;
                  document.getElementById('audio').load();
                  document.getElementById('audio').play();
                  document.getElementById('song-name').style.display = 'block';
                  document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
+                 console.log('Playing song:', data.name.replace('.mp3', ''), 'at index:', currentIndex);
                  document.getElementById('play-btn').style.display = 'none';
                  document.getElementById('controls').style.display = 'block';
                  const allP = document.querySelectorAll('#audio-items p');
@@ -195,6 +197,7 @@
    document.getElementById('play-pause-btn').textContent = '❚❚';
    document.getElementById('song-name').style.display = 'block';
    document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
+   console.log('Playing song:', data.name.replace('.mp3', ''), 'at index:', currentIndex);
    if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
      document.getElementById('song-name').style.fontFamily = "'Ma Shan Zheng', sans-serif";
    } else {
@@ -267,14 +270,18 @@
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
        currentIndex--;
-       playCurrentSong();
+     } else {
+       currentIndex = currentSongList.length - 1;
      }
+     playCurrentSong();
    };
    document.getElementById('next-btn').onclick = () => {
      if (currentIndex < currentSongList.length - 1) {
        currentIndex++;
-       playCurrentSong();
+     } else {
+       currentIndex = 0;
      }
+     playCurrentSong();
    };
    document.getElementById('play-pause-btn').onclick = () => {
      const audio = document.getElementById('audio');
@@ -307,7 +314,9 @@
    document.getElementById('audio').onended = () => {
      if (currentIndex < currentSongList.length - 1) {
        currentIndex++;
-       playCurrentSong();
+     } else {
+       currentIndex = 0;
      }
+     playCurrentSong();
    };
  };
