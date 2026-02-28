@@ -43,6 +43,7 @@
       <button id="prev-btn" style="margin: 5px;">◁◁</button>
       <button id="play-pause-btn" style="margin: 5px;">▶</button>
       <button id="next-btn" style="margin: 5px;">▷▷</button>
+      <button id="repeat-btn" style="margin: 5px; font-family: 'Shalimar', cursive; font-size: 30px;">Repeat this song</button>
       <br>
       <input type="range" id="seek-bar" min="0" max="100" value="0" style="width: 200px; margin: 5px;">
       <span id="current-time">0:00</span> / <span id="duration">0:00</span>
@@ -51,7 +52,7 @@
         <img id="play-btn" src="photos/Logo.png" onclick="playAudio()" style="width: 500px; height: 500px; cursor: pointer; margin: 10px;" alt="Play">
     </div>
     <div id="song-name">黄昏-周传雄</div>
-    <audio id="audio" autoplay loop>
+    <audio id="audio" autoplay>
         <source src="sound/黄昏.mp3" type="audio/mpeg">
         Trình duyệt của bạn không hỗ trợ phát âm thanh.
     </audio>

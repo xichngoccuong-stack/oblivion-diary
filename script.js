@@ -12,6 +12,7 @@
  const db = firebase.firestore();
  let currentSongList = [];
  let currentIndex = -1;
+ let isRepeatMode = false;
 
  const cloudName = 'dglxrlydv';
  const uploadPreset = 'vocab_images';
@@ -293,6 +294,10 @@
        document.getElementById('play-pause-btn').textContent = '▶';
      }
    };
+   document.getElementById('repeat-btn').onclick = () => {
+     isRepeatMode = !isRepeatMode;
+     document.getElementById('repeat-btn').style.color = isRepeatMode ? 'red' : '';
+   };
    document.getElementById('seek-bar').oninput = (e) => {
      const audio = document.getElementById('audio');
      const seekTo = (e.target.value / 100) * audio.duration;
@@ -312,11 +317,17 @@
      }
    };
    document.getElementById('audio').onended = () => {
-     if (currentIndex < currentSongList.length - 1) {
-       currentIndex++;
+     if (isRepeatMode) {
+       const audio = document.getElementById('audio');
+       audio.currentTime = 0;
+       audio.play();
      } else {
-       currentIndex = 0;
+       if (currentIndex < currentSongList.length - 1) {
+         currentIndex++;
+       } else {
+         currentIndex = 0;
+       }
+       playCurrentSong();
      }
-     playCurrentSong();
    };
  };
