@@ -46,6 +46,7 @@
       </div>
     </div>
     <button onclick="toggleFunctionMenu()" style="position: absolute; top: 70px; right: 10px; background: transparent; border: none; font-size: 24px; cursor: pointer;">☰</button>
+    <button id="rain-button" onclick="playRainLoop()" style="position: absolute; top: 110px; right: 10px; background: transparent; border: none; font-size: 24px; cursor: pointer; font-family: 'Shalimar', cursive;">⛈Raindrops</button>
     <div id="function-menu" style="display: none; position: absolute; top: 110px; right: 10px; background: rgba(0,0,0,0.8); color: white; border: 2px solid white; border-radius: 5px; padding: 10px; z-index: 1000;">
       <p onclick="toggleUploadForm()" style="margin: 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Add track/Create album</p>
       <p onclick="toggleManageModal()" style="margin: 5px 0 0 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Track management</p>
@@ -75,6 +76,7 @@
         <source src="sound/黄昏.mp3" type="audio/mpeg">
         Your browser does not support audio playback.
     </audio>
+    <audio id="rain-audio" style="display:none;" loop></audio>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase.js"></script>
     <script src="script.js?v=1"></script>
     <div id="overlay" class="overlay">

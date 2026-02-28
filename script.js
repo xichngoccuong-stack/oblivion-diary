@@ -15,6 +15,7 @@
  let isRepeatMode = false;
  let isAlbumsLoaded = false;
  let currentView = 'albums';
+ let isRainPlaying = false;
 
  const cloudName = 'dglxrlydv';
  const uploadPreset = 'vocab_images';
@@ -206,6 +207,21 @@
      }
  }
 
+ function playRainLoop() {
+     const rainAudio = document.getElementById('rain-audio');
+     const button = document.getElementById('rain-button');
+     if (!isRainPlaying) {
+         rainAudio.src = 'sound/Rain.mp3';
+         rainAudio.play();
+         isRainPlaying = true;
+         button.style.color = 'orange';
+     } else {
+         rainAudio.pause();
+         isRainPlaying = false;
+         button.style.color = '';
+     }
+ }
+
  function toggleUploadForm() {
    const modal = document.getElementById('upload-modal');
    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
@@ -324,6 +340,7 @@
  window.saveSongChanges = saveSongChanges;
  window.deleteSong = deleteSong;
  window.toggleAlbums = toggleAlbums;
+ window.playRainLoop = playRainLoop;
  
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
