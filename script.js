@@ -253,7 +253,14 @@
  window.onload = function() {
    loadAlbums();
    loadAlbumList();
-   Promise.all(backgroundImages.map(preloadImage)).then(() => {
+   const defaultImagePromise = new Promise((resolve, reject) => {
+     const img = new Image();
+     img.onload = resolve;
+     img.onerror = reject;
+     img.src = 'photos/Default.jpg';
+   });
+   Promise.all([defaultImagePromise, ...backgroundImages.map(preloadImage)]).then(() => {
+     document.getElementById('background1').style.opacity = '1';
      changeBackground();
      setInterval(changeBackground, 10000);
    });
