@@ -94,7 +94,7 @@
          snapshot.forEach(doc => {
              const data = doc.data();
              const p = document.createElement('p');
-             p.textContent = data.name;
+             p.textContent = '✦ ' +data.name;
              p.style.color = 'white';
              p.style.cursor = 'pointer';
              p.style.fontFamily = "'Shalimar', cursive";
