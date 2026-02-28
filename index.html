@@ -51,10 +51,10 @@
       <p onclick="toggleManageModal()" style="margin: 5px 0 0 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Track management</p>
     </div>
     <div id="album-list" style="background: transparent; color: white; padding: 10px; margin: 80px 10px 10px 10px; border: 2px solid white;">
-      <h3 style="font-family: 'Shalimar', cursive; font-size: 24px;">Albums</h3>
-      <div id="album-items"></div>
+      <h3 onclick="toggleAlbums()" style="font-family: 'Shalimar', cursive; font-size: 24px; cursor: pointer;">Albums</h3>
+      <div id="album-items" style="display: none;"></div>
     </div>
-    <div id="audio-list" style="display:none; background: transparent; color: white; padding: 10px; margin: 10px; border: 2px solid white; overflow-y: auto; max-height: 250px;">
+    <div id="audio-list" style="display:none; background: transparent; color: white; padding: 10px; margin: 10px; border: 2px solid white; overflow-y: auto; max-height: 350px;">
       <h3 style="font-family: 'Shalimar', cursive; font-size: 24px;">Tracks</h3>
       <div id="audio-items"></div>
     </div>

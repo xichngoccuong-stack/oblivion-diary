@@ -13,6 +13,8 @@
  let currentSongList = [];
  let currentIndex = -1;
  let isRepeatMode = false;
+ let isAlbumsLoaded = false;
+ let currentView = 'albums';
 
  const cloudName = 'dglxrlydv';
  const uploadPreset = 'vocab_images';
@@ -149,7 +151,9 @@
              audioItems.appendChild(p);
              index++;
          });
+         document.getElementById('album-items').style.display = 'none';
          document.getElementById('audio-list').style.display = 'block';
+         currentView = 'music';
          if (currentSongList.length > 0) {
              currentIndex = 0;
              playCurrentSong();
@@ -170,13 +174,35 @@
          await db.collection('albums').add({ name });
          showNotification('Album created: ' + name);
          loadAlbums();
-         loadAlbumList();
+         if (isAlbumsLoaded) loadAlbumList();
          document.getElementById('new-album-name').value = '';
      } catch (error) {
          console.error('Create album failed:', error);
          alert('Create album failed');
      } finally {
          document.getElementById('overlay').style.display = 'none';
+     }
+ }
+
+ async function toggleAlbums() {
+     const albumItems = document.getElementById('album-items');
+     const audioList = document.getElementById('audio-list');
+     if (currentView === 'music') {
+         audioList.style.display = 'none';
+         if (isAlbumsLoaded) {
+             albumItems.style.display = 'block';
+         } else {
+             await loadAlbumList();
+             isAlbumsLoaded = true;
+             albumItems.style.display = 'block';
+         }
+         currentView = 'albums';
+     } else {
+         if (!isAlbumsLoaded) {
+             await loadAlbumList();
+             isAlbumsLoaded = true;
+         }
+         albumItems.style.display = albumItems.style.display === 'none' ? 'block' : 'none';
      }
  }
 
@@ -256,7 +282,7 @@
      await db.collection('music').doc(songId).update(updateData);
      showNotification('Update successful');
      toggleManageModal();
-     loadAlbumList();
+     if (isAlbumsLoaded) loadAlbumList();
      if (newAlbum) {
        loadAlbums();
      }
@@ -280,7 +306,7 @@
      await db.collection('music').doc(songId).delete();
      showNotification('Delete track successful');
      toggleManageModal();
-     loadAlbumList();
+     if (isAlbumsLoaded) loadAlbumList();
    } catch (error) {
      console.error('Delete track failed:', error);
      alert('Delete track failed');
@@ -297,6 +323,7 @@
  window.loadAlbumsForManage = loadAlbumsForManage;
  window.saveSongChanges = saveSongChanges;
  window.deleteSong = deleteSong;
+ window.toggleAlbums = toggleAlbums;
  
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
@@ -362,7 +389,6 @@
  }
  window.onload = function() {
    loadAlbums();
-   loadAlbumList();
    const defaultImagePromise = new Promise((resolve, reject) => {
      const img = new Image();
      img.onload = resolve;
