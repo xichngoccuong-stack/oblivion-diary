@@ -6,6 +6,7 @@ body {
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
+    background-color: black;
 }
 #background1 {
     position: fixed;
