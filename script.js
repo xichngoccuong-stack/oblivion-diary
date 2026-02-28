@@ -41,7 +41,7 @@
      const album = document.getElementById('album-select').value;
      if (!file) return;
      if (!album) {
-         alert('Vui lòng chọn album');
+         alert('Please select an album');
          return;
      }
      document.getElementById('overlay').style.display = 'block';
@@ -71,7 +71,7 @@
    try {
      const snapshot = await db.collection('albums').get();
      const select = document.getElementById('album-select');
-     select.innerHTML = '<option value="">Chọn Album</option>';
+     select.innerHTML = '<option value="">Select album</option>';
      snapshot.forEach(doc => {
        const data = doc.data();
        const option = document.createElement('option');
@@ -162,7 +162,7 @@
  async function createAlbum() {
      const name = document.getElementById('new-album-name').value.trim();
      if (!name) {
-         alert('Vui lòng nhập tên album');
+         alert('Please enter the album name');
          return;
      }
      document.getElementById('overlay').style.display = 'block';
@@ -203,7 +203,7 @@
    try {
      const snapshot = await db.collection('music').get();
      const select = document.getElementById('song-select');
-     select.innerHTML = '<option value="">Chọn bài hát</option>';
+     select.innerHTML = '<option value="">Select a track</option>';
      snapshot.forEach(doc => {
        const data = doc.data();
        const option = document.createElement('option');
@@ -220,7 +220,7 @@
    try {
      const snapshot = await db.collection('albums').get();
      const select = document.getElementById('album-move-select');
-     select.innerHTML = '<option value="">Chọn album để di chuyển (tùy chọn)</option>';
+     select.innerHTML = '<option value="">Select an album to move to (optional)</option>';
      snapshot.forEach(doc => {
        const data = doc.data();
        const option = document.createElement('option');
@@ -238,7 +238,7 @@
    const newName = document.getElementById('new-song-name').value.trim();
    const newAlbum = document.getElementById('album-move-select').value;
    if (!songId) {
-     alert('Vui lòng chọn bài hát');
+     alert('Please select a track');
      return;
    }
    const updateData = {};
@@ -249,12 +249,12 @@
      updateData.album = newAlbum;
    }
    if (Object.keys(updateData).length === 0) {
-     alert('Không có thay đổi nào');
+     alert('No changes');
      return;
    }
    try {
      await db.collection('music').doc(songId).update(updateData);
-     showNotification('Cập nhật thành công');
+     showNotification('Update successful');
      toggleManageModal();
      loadAlbumList();
      if (newAlbum) {
@@ -262,28 +262,28 @@
      }
    } catch (error) {
      console.error('Update song failed:', error);
-     alert('Cập nhật thất bại');
+     alert('Update failed');
    }
  }
 
  async function deleteSong() {
    const songId = document.getElementById('song-select').value;
    if (!songId) {
-     alert('Vui lòng chọn bài hát để xóa');
+     alert('Please select a track to delete');
      return;
    }
-   const confirmDelete = confirm('Bạn có chắc chắn muốn xóa bài hát này?');
+   const confirmDelete = confirm('Are you sure you want to delete this track?');
    if (!confirmDelete) {
      return;
    }
    try {
      await db.collection('music').doc(songId).delete();
-     showNotification('Xóa bài hát thành công');
+     showNotification('Delete track successful');
      toggleManageModal();
      loadAlbumList();
    } catch (error) {
-     console.error('Delete song failed:', error);
-     alert('Xóa bài hát thất bại');
+     console.error('Delete track failed:', error);
+     alert('Delete track failed');
    }
  }
 
