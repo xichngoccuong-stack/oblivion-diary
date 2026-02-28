@@ -16,6 +16,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-image: url('photos/Default.jpg');
     z-index: -1;
     transition: transform 3s ease-in-out;
     transform: translateX(0%);
@@ -75,6 +76,23 @@ button {
 
 #audio-list {
     z-index: 1;
+}
+
+#audio-list::-webkit-scrollbar {
+    width: 10px;
+}
+
+#audio-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#audio-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+#audio-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
 }
 
 #play-btn {
