@@ -262,7 +262,7 @@
    Promise.all([defaultImagePromise, ...backgroundImages.map(preloadImage)]).then(() => {
      document.getElementById('background1').style.opacity = '1';
      changeBackground();
-     setInterval(changeBackground, 10000);
+     setInterval(changeBackground, 120000);
    });
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
