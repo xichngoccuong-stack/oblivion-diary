@@ -561,8 +561,15 @@
    return `${min}:${sec.toString().padStart(2, '0')}`;
  }
 
- window.onload = function() {
+ window.onload = async function() {
+   // Load albums and album list
    loadAlbums();
+   if (!isAlbumsLoaded) {
+     await loadAlbumList();
+     isAlbumsLoaded = true;
+   }
+
+   // Set up event handlers for controls
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
        currentIndex--;
@@ -631,12 +638,4 @@
        playCurrentSong();
      }
    };
- };
-
- // Auto expand album list on page load
- window.onload = async () => {
-   if (!isAlbumsLoaded) {
-     await loadAlbumList();
-     isAlbumsLoaded = true;
-   }
  };
