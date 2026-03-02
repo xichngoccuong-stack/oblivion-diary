@@ -123,7 +123,7 @@
              p.style.cursor = 'pointer';
              p.style.fontFamily = "'Shalimar', cursive";
              p.style.fontSize = '24px';
-             p.onclick = () => loadMusicForAlbum(doc.id);
+             p.onclick = (event) => { event.stopPropagation(); loadMusicForAlbum(doc.id); };
              albumItems.appendChild(p);
          });
      } catch (error) {
@@ -262,8 +262,11 @@
      }
  }
 
- function toggleUploadForm() {
+ async function toggleUploadForm() {
    const modal = document.getElementById('upload-modal');
+   if (modal.style.display === 'none') {
+     await loadAlbums();
+   }
    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
  }
 
@@ -628,4 +631,12 @@
        playCurrentSong();
      }
    };
+ };
+
+ // Auto expand album list on page load
+ window.onload = async () => {
+   if (!isAlbumsLoaded) {
+     await loadAlbumList();
+     isAlbumsLoaded = true;
+   }
  };
