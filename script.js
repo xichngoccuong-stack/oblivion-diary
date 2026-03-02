@@ -17,6 +17,7 @@
  let currentView = 'albums';
  let isRainPlaying = false;
  let currentAlbumBackground = 'https://res.cloudinary.com/dglxrlydv/video/upload/v1772435335/Background_qelwz8.mp4';
+ let manageSongs = [];
 
  const cloudName = 'dglxrlydv';
  const uploadPreset = 'vocab_images';
@@ -283,14 +284,19 @@
  async function loadSongsForManage() {
    try {
      const snapshot = await db.collection('music').get();
-     const select = document.getElementById('song-select');
-     select.innerHTML = '<option value="">Select a track</option>';
-     snapshot.forEach(doc => {
+     const input = document.getElementById('song-input');
+     const datalist = document.getElementById('song-list');
+     datalist.innerHTML = '';
+     manageSongs = [];
+     const docs = [];
+     snapshot.forEach(doc => docs.push(doc));
+     docs.sort((a, b) => a.data().name.localeCompare(b.data().name));
+     docs.forEach(doc => {
        const data = doc.data();
+       manageSongs.push({ id: doc.id, name: data.name });
        const option = document.createElement('option');
-       option.value = doc.id;
-       option.textContent = data.name.replace('.mp3', '');
-       select.appendChild(option);
+       option.value = data.name.replace('.mp3', '');
+       datalist.appendChild(option);
      });
    } catch (error) {
      console.error('Load songs for manage failed:', error);
@@ -302,7 +308,10 @@
      const snapshot = await db.collection('albums').get();
      const select = document.getElementById('album-move-select');
      select.innerHTML = '<option value="">Select an album to move to (optional)</option>';
-     snapshot.forEach(doc => {
+     const docs = [];
+     snapshot.forEach(doc => docs.push(doc));
+     docs.sort((a, b) => a.data().name.localeCompare(b.data().name));
+     docs.forEach(doc => {
        const data = doc.data();
        const option = document.createElement('option');
        option.value = doc.id;
@@ -315,14 +324,20 @@
  }
 
  async function saveSongChanges() {
-   const songId = document.getElementById('song-select').value;
-   const newName = document.getElementById('new-song-name').value.trim();
-   const newAlbum = document.getElementById('album-move-select').value;
-   const file = document.getElementById('song-background-file-input').files[0];
-   if (!songId) {
+   const songNameInput = document.getElementById('song-input').value;
+   if (!songNameInput) {
      alert('Please select a track');
      return;
    }
+   const song = manageSongs.find(s => s.name.replace('.mp3', '') === songNameInput);
+   if (!song) {
+     alert('Track not found');
+     return;
+   }
+   const songId = song.id;
+   const newName = document.getElementById('new-song-name').value.trim();
+   const newAlbum = document.getElementById('album-move-select').value;
+   const file = document.getElementById('song-background-file-input').files[0];
    const updateData = {};
    if (newName) {
      updateData.name = newName + '.mp3';
