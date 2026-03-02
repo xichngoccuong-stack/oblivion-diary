@@ -370,11 +370,17 @@
  }
 
  async function deleteSong() {
-   const songId = document.getElementById('song-select').value;
-   if (!songId) {
-     alert('Please select a track to delete');
-     return;
-   }
+     const songNameInput = document.getElementById('song-input').value;
+     if (!songNameInput) {
+       alert('Please select a track to delete');
+       return;
+     }
+     const song = manageSongs.find(s => s.name.replace('.mp3', '') === songNameInput);
+     if (!song) {
+       alert('Track not found');
+       return;
+     }
+     const songId = song.id;
    const confirmDelete = confirm('Are you sure you want to delete this track?');
    if (!confirmDelete) {
      return;
@@ -391,11 +397,17 @@
  }
 
  async function deleteSongBackground() {
-   const songId = document.getElementById('song-select').value;
-   if (!songId) {
-     alert('Please select a track');
-     return;
-   }
+     const songNameInput = document.getElementById('song-input').value;
+     if (!songNameInput) {
+       alert('Please select a track');
+       return;
+     }
+     const song = manageSongs.find(s => s.name.replace('.mp3', '') === songNameInput);
+     if (!song) {
+       alert('Track not found');
+       return;
+     }
+     const songId = song.id;
    const confirmDelete = confirm('Are you sure you want to delete the background video for this track?');
    if (!confirmDelete) {
      return;
