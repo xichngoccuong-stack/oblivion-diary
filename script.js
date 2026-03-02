@@ -16,6 +16,7 @@
  let isAlbumsLoaded = false;
  let currentView = 'albums';
  let isRainPlaying = false;
+ let currentAlbumBackground = 'https://res.cloudinary.com/dglxrlydv/video/upload/v1772435335/Background_qelwz8.mp4';
 
  const cloudName = 'dglxrlydv';
  const uploadPreset = 'vocab_images';
@@ -112,6 +113,11 @@
      try {
          const albumDoc = await db.collection('albums').doc(albumId).get();
          const albumName = albumDoc.data().name;
+         currentAlbumBackground = albumDoc.data().background || 'https://res.cloudinary.com/dglxrlydv/video/upload/v1772435335/Background_qelwz8.mp4';
+         const bgVideo = document.getElementById('background-video');
+         bgVideo.src = currentAlbumBackground;
+         bgVideo.load();
+         bgVideo.play();
          const snapshot = await db.collection('music').where('album', '==', albumId).get();
          const audioItems = document.getElementById('audio-items');
          audioItems.innerHTML = '';
@@ -143,7 +149,11 @@
                  document.getElementById('audio').play();
                  document.getElementById('song-name').style.display = 'block';
                  document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
-                 document.getElementById('play-btn').style.display = 'none';
+                 if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
+                     document.getElementById('song-name').style.fontFamily = "'Ma Shan Zheng', sans-serif";
+                 } else {
+                     document.getElementById('song-name').style.fontFamily = "'Shalimar', cursive";
+                 }
                  document.getElementById('controls').style.display = 'block';
                  const allP = document.querySelectorAll('#audio-items p');
                  allP.forEach(p => p.classList.remove('playing'));
@@ -155,10 +165,6 @@
          document.getElementById('album-items').style.display = 'none';
          document.getElementById('audio-list').style.display = 'block';
          currentView = 'music';
-         if (currentSongList.length > 0) {
-             currentIndex = 0;
-             playCurrentSong();
-         }
      } catch (error) {
          console.error('Load music for album failed:', error);
      }
@@ -172,7 +178,7 @@
      }
      document.getElementById('overlay').style.display = 'block';
      try {
-         await db.collection('albums').add({ name });
+         await db.collection('albums').add({ name, background: '' });
          showNotification('Album created: ' + name);
          loadAlbums();
          if (isAlbumsLoaded) loadAlbumList();
@@ -212,7 +218,7 @@
      const rainVideo = document.getElementById('rain-video');
      const button = document.getElementById('rain-button');
      if (!isRainPlaying) {
-         rainAudio.src = 'sound/Rain.mp3';
+         rainAudio.src = 'https://res.cloudinary.com/dglxrlydv/video/upload/v1772433226/Rain_hgxd9x.mp3';
          rainAudio.play();
          rainVideo.play();
          rainVideo.style.display = 'block';
@@ -334,6 +340,64 @@
    }
  }
 
+ function toggleBackgroundModal() {
+   const modal = document.getElementById('background-modal');
+   modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+   if (modal.style.display === 'block') {
+     loadAlbumsForBackground();
+   }
+ }
+
+ async function loadAlbumsForBackground() {
+   try {
+     const snapshot = await db.collection('albums').get();
+     const select = document.getElementById('background-album-select');
+     select.innerHTML = '<option value="">Select album</option>';
+     snapshot.forEach(doc => {
+       const data = doc.data();
+       const option = document.createElement('option');
+       option.value = doc.id;
+       option.textContent = data.name;
+       select.appendChild(option);
+     });
+   } catch (error) {
+     console.error('Load albums for background failed:', error);
+   }
+ }
+
+ async function saveBackground() {
+   const albumId = document.getElementById('background-album-select').value;
+   const file = document.getElementById('background-file-input').files[0];
+   if (!albumId) {
+     alert('Please select an album');
+     return;
+   }
+   if (!file) {
+     alert('Please select a video file');
+     return;
+   }
+   document.getElementById('overlay').style.display = 'block';
+   const formData = new FormData();
+   formData.append('file', file);
+   formData.append('upload_preset', uploadPreset);
+   try {
+     const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/video/upload`, {
+       method: 'POST',
+       body: formData
+     });
+     const data = await response.json();
+     const url = data.secure_url;
+     await db.collection('albums').doc(albumId).update({ background: url });
+     showNotification('Background updated successfully');
+     toggleBackgroundModal();
+   } catch (error) {
+     console.error('Save background failed:', error);
+     alert('Save background failed');
+   } finally {
+     document.getElementById('overlay').style.display = 'none';
+   }
+ }
+
  window.playAudio = playAudio;
  window.uploadFile = uploadFile;
  window.toggleUploadForm = toggleUploadForm;
@@ -346,20 +410,15 @@
  window.deleteSong = deleteSong;
  window.toggleAlbums = toggleAlbums;
  window.playRainLoop = playRainLoop;
+ window.toggleBackgroundModal = toggleBackgroundModal;
+ window.saveBackground = saveBackground;
+ window.loadAlbumsForBackground = loadAlbumsForBackground;
  
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
    // Set background video based on album
    const bgVideo = document.getElementById('background-video');
-   if (data.albumName === 'Bạch Âm') {
-     bgVideo.src = 'video/BachAm.mp4';
-   } else if (data.albumName === 'Dead') {
-     bgVideo.src = 'video/Dead.mp4';
-   } else if (data.albumName === 'Nhạc Trung') {
-     bgVideo.src = 'video/NhacTrung.mp4';
-   } else {
-     bgVideo.src = 'video/Background.mp4';
-   }
+   bgVideo.src = currentAlbumBackground;
    bgVideo.load();
    bgVideo.play();
    document.getElementById('audio').src = data.url;
@@ -374,9 +433,12 @@
    }
    document.getElementById('play-btn').style.display = 'none';
    document.getElementById('controls').style.display = 'block';
+   console.log('Current index:', currentIndex, 'Song list length:', currentSongList.length);
    const allP = document.querySelectorAll('#audio-items p');
+   console.log('All P elements:', allP.length);
    allP.forEach(p => p.classList.remove('playing'));
    const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
+   console.log('Current P:', currentP);
    if (currentP) currentP.classList.add('playing');
  }
  
@@ -386,26 +448,6 @@
    return `${min}:${sec.toString().padStart(2, '0')}`;
  }
 
- const backgroundImages = [
-      'background/1.jpg',
-      'background/2.jpg',
-      'background/3.jpg',
-      'background/4.jpg'
-  ];
-  let currentBackgroundIndex = 0;
-  let currentBg = 1;
- function preloadImage(src) {
-   return new Promise((resolve, reject) => {
-     const img = new Image();
-     img.onload = resolve;
-     img.onerror = reject;
-     img.src = src;
-   });
- }
- 
- function changeBackground() {
-     // Disabled: using video background instead of images
- }
  window.onload = function() {
    loadAlbums();
    // Background video is autoplay, no need for preload or changeBackground
