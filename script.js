@@ -209,14 +209,19 @@
 
  function playRainLoop() {
      const rainAudio = document.getElementById('rain-audio');
+     const rainVideo = document.getElementById('rain-video');
      const button = document.getElementById('rain-button');
      if (!isRainPlaying) {
          rainAudio.src = 'sound/Rain.mp3';
          rainAudio.play();
+         rainVideo.play();
+         rainVideo.style.display = 'block';
          isRainPlaying = true;
          button.style.color = 'orange';
      } else {
          rainAudio.pause();
+         rainVideo.pause();
+         rainVideo.style.display = 'none';
          isRainPlaying = false;
          button.style.color = '';
      }
@@ -344,6 +349,19 @@
  
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
+   // Set background video based on album
+   const bgVideo = document.getElementById('background-video');
+   if (data.albumName === 'Bạch Âm') {
+     bgVideo.src = 'video/BachAm.mp4';
+   } else if (data.albumName === 'Dead') {
+     bgVideo.src = 'video/Dead.mp4';
+   } else if (data.albumName === 'Nhạc Trung') {
+     bgVideo.src = 'video/NhacTrung.mp4';
+   } else {
+     bgVideo.src = 'video/Background.mp4';
+   }
+   bgVideo.load();
+   bgVideo.play();
    document.getElementById('audio').src = data.url;
    document.getElementById('audio').play();
    document.getElementById('play-pause-btn').textContent = '❚❚';
@@ -369,13 +387,13 @@
  }
 
  const backgroundImages = [
-     'background/1.jpg',
-     'background/2.jpg',
-     'background/3.jpg',
-     'background/4.jpg'
- ];
- let currentBackgroundIndex = 0;
- let currentBg = 1;
+      'background/1.jpg',
+      'background/2.jpg',
+      'background/3.jpg',
+      'background/4.jpg'
+  ];
+  let currentBackgroundIndex = 0;
+  let currentBg = 1;
  function preloadImage(src) {
    return new Promise((resolve, reject) => {
      const img = new Image();
@@ -386,37 +404,11 @@
  }
  
  function changeBackground() {
-     const nextBg = currentBg === 1 ? 2 : 1;
-     const nextDiv = document.getElementById('background' + nextBg);
-     nextDiv.style.backgroundImage = `url('${backgroundImages[currentBackgroundIndex]}')`;
-     nextDiv.style.zIndex = '0';
-     nextDiv.style.transform = 'translateX(100%)';
-     setTimeout(() => {
-         nextDiv.style.transform = 'translateX(0%)';
-         document.getElementById('background' + currentBg).style.zIndex = '-1';
-     }, 0);
-     document.getElementById('background' + currentBg).style.transform = 'translateX(-100%)';
-     setTimeout(() => {
-         document.getElementById('background' + currentBg).style.backgroundImage = '';
-         document.getElementById('background' + currentBg).style.transform = 'translateX(100%)';
-         currentBg = nextBg;
-         nextDiv.style.zIndex = '-1';
-     }, 3000);
-     currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
+     // Disabled: using video background instead of images
  }
  window.onload = function() {
    loadAlbums();
-   const defaultImagePromise = new Promise((resolve, reject) => {
-     const img = new Image();
-     img.onload = resolve;
-     img.onerror = reject;
-     img.src = 'photos/Default.jpg';
-   });
-   Promise.all([defaultImagePromise, ...backgroundImages.map(preloadImage)]).then(() => {
-     document.getElementById('background1').style.opacity = '1';
-     changeBackground();
-     setInterval(changeBackground, 120000);
-   });
+   // Background video is autoplay, no need for preload or changeBackground
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
        currentIndex--;
