@@ -210,18 +210,15 @@
  function playRainLoop() {
      const rainAudio = document.getElementById('rain-audio');
      const button = document.getElementById('rain-button');
-     const rainContainer = document.getElementById('rain-container');
      if (!isRainPlaying) {
          rainAudio.src = 'sound/Rain.mp3';
          rainAudio.play();
          isRainPlaying = true;
          button.style.color = 'orange';
-         rainContainer.style.display = 'block';
      } else {
          rainAudio.pause();
          isRainPlaying = false;
          button.style.color = '';
-         rainContainer.style.display = 'none';
      }
  }
 
