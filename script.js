@@ -165,7 +165,6 @@
          document.getElementById('album-items').style.display = 'none';
          document.getElementById('audio-list').style.display = 'block';
          currentView = 'music';
-         // Tự động phát bài đầu tiên nếu có bài hát
          if (currentSongList.length > 0) {
              currentIndex = 0;
              document.getElementById('controls').style.display = 'block';
@@ -424,31 +423,51 @@
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
    const bgVideo = document.getElementById('background-video');
-   // Only load background if it has changed (when changing album)
-   if (bgVideo.src !== currentAlbumBackground) {
-     bgVideo.src = currentAlbumBackground;
-     bgVideo.load();
+   if (bgVideo) {
+     if (bgVideo.src !== currentAlbumBackground) {
+       bgVideo.src = currentAlbumBackground;
+       bgVideo.load();
+     }
+     bgVideo.play();
    }
-   bgVideo.play();
-   document.getElementById('audio').src = data.url;
-   document.getElementById('audio').play();
-   document.getElementById('play-pause-btn').textContent = '❚❚';
-   document.getElementById('song-name').style.display = 'block';
-   document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
-   if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
-     document.getElementById('song-name').style.fontFamily = "'Ma Shan Zheng', sans-serif";
-   } else {
-     document.getElementById('song-name').style.fontFamily = "'Shalimar', cursive";
+   const audio = document.getElementById('audio');
+   if (audio) {
+     audio.src = data.url;
+     const songNameElement = document.getElementById('song-name');
+     if (songNameElement) {
+       songNameElement.style.display = 'block';
+       songNameElement.textContent = data.name.replace('.mp3', '');
+       if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
+         songNameElement.style.fontFamily = "'Ma Shan Zheng', sans-serif";
+       } else {
+         songNameElement.style.fontFamily = "'Shalimar', cursive";
+       }
+     }
+     const playBtn = document.getElementById('play-btn');
+     if (playBtn) {
+       playBtn.style.display = 'none';
+     }
+     const controls = document.getElementById('controls');
+     if (controls) {
+       controls.style.display = 'block';
+     }
+     const allP = document.querySelectorAll('#audio-items p');
+     allP.forEach(p => p.classList.remove('playing'));
+     audio.play().then(() => {
+       const playPauseBtn = document.getElementById('play-pause-btn');
+       if (playPauseBtn) {
+         playPauseBtn.textContent = '❚❚';
+       }
+       const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
+       if (currentP) currentP.classList.add('playing');
+     }).catch((e) => {
+       console.error('Autoplay blocked: ' + e.message);
+       const playPauseBtn = document.getElementById('play-pause-btn');
+       if (playPauseBtn) {
+         playPauseBtn.textContent = '▶';
+       }
+     });
    }
-   document.getElementById('play-btn').style.display = 'none';
-   document.getElementById('controls').style.display = 'block';
-   console.log('Current index:', currentIndex, 'Song list length:', currentSongList.length);
-   const allP = document.querySelectorAll('#audio-items p');
-   console.log('All P elements:', allP.length);
-   allP.forEach(p => p.classList.remove('playing'));
-   const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
-   console.log('Current P:', currentP);
-   if (currentP) currentP.classList.add('playing');
  }
  
  function formatTime(seconds) {
