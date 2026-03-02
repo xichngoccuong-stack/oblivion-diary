@@ -165,6 +165,13 @@
          document.getElementById('album-items').style.display = 'none';
          document.getElementById('audio-list').style.display = 'block';
          currentView = 'music';
+         // Tự động phát bài đầu tiên nếu có bài hát
+         if (currentSongList.length > 0) {
+             currentIndex = 0;
+             document.getElementById('controls').style.display = 'block';
+             document.getElementById('song-name').style.display = 'block';
+             playCurrentSong();
+         }
      } catch (error) {
          console.error('Load music for album failed:', error);
      }
@@ -416,10 +423,12 @@
  
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
-   // Set background video based on album
    const bgVideo = document.getElementById('background-video');
-   bgVideo.src = currentAlbumBackground;
-   bgVideo.load();
+   // Only load background if it has changed (when changing album)
+   if (bgVideo.src !== currentAlbumBackground) {
+     bgVideo.src = currentAlbumBackground;
+     bgVideo.load();
+   }
    bgVideo.play();
    document.getElementById('audio').src = data.url;
    document.getElementById('audio').play();
@@ -450,7 +459,6 @@
 
  window.onload = function() {
    loadAlbums();
-   // Background video is autoplay, no need for preload or changeBackground
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
        currentIndex--;
