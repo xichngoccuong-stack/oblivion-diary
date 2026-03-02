@@ -43,6 +43,8 @@
         <select id="album-move-select" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
           <option value="">Select an album to move to (optional)</option>
         </select>
+        <input type="file" id="song-background-file-input" accept="video/*" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
+        <button onclick="deleteSongBackground()" style="margin: 10px; color: white; background: #dc3545; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">Delete Background Video</button>
         <button onclick="saveSongChanges()" style="margin: 10px; color: white; background: #28a745; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">Save changes</button>
         <button onclick="deleteSong()" style="margin: 10px; color: white; background: #dc3545; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">Delete track</button>
       </div>

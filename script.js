@@ -71,6 +71,27 @@
      }
  }
 
+ async function uploadSongBackgroundVideo(file) {
+     document.getElementById('overlay').style.display = 'block';
+     const formData = new FormData();
+     formData.append('file', file);
+     formData.append('upload_preset', uploadPreset);
+     try {
+         const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/video/upload`, {
+             method: 'POST',
+             body: formData
+         });
+         const data = await response.json();
+         document.getElementById('overlay').style.display = 'none';
+         return data.secure_url;
+     } catch (error) {
+         document.getElementById('overlay').style.display = 'none';
+         console.error('Upload background video failed:', error);
+         alert('Upload background video failed');
+         return null;
+     }
+ }
+
  async function loadAlbums() {
    try {
      const snapshot = await db.collection('albums').get();
@@ -144,6 +165,7 @@
              p.onclick = () => {
                  const songName = data.name;
                  currentIndex = currentSongList.findIndex(song => song.name === songName);
+                 setBackground(data);
                  document.getElementById('audio').src = data.url;
                  document.getElementById('audio').load();
                  document.getElementById('audio').play();
@@ -296,6 +318,7 @@
    const songId = document.getElementById('song-select').value;
    const newName = document.getElementById('new-song-name').value.trim();
    const newAlbum = document.getElementById('album-move-select').value;
+   const file = document.getElementById('song-background-file-input').files[0];
    if (!songId) {
      alert('Please select a track');
      return;
@@ -307,7 +330,13 @@
    if (newAlbum) {
      updateData.album = newAlbum;
    }
-   if (Object.keys(updateData).length === 0) {
+   if (file) {
+     const url = await uploadSongBackgroundVideo(file);
+     if (url) {
+       updateData.backgroundVideo = url;
+     }
+   }
+   if (Object.keys(updateData).length === 0 && !file) {
      alert('No changes');
      return;
    }
@@ -343,6 +372,26 @@
    } catch (error) {
      console.error('Delete track failed:', error);
      alert('Delete track failed');
+   }
+ }
+
+ async function deleteSongBackground() {
+   const songId = document.getElementById('song-select').value;
+   if (!songId) {
+     alert('Please select a track');
+     return;
+   }
+   const confirmDelete = confirm('Are you sure you want to delete the background video for this track?');
+   if (!confirmDelete) {
+     return;
+   }
+   try {
+     await db.collection('music').doc(songId).update({ backgroundVideo: null });
+     showNotification('Background video deleted successfully');
+     toggleManageModal();
+   } catch (error) {
+     console.error('Delete background video failed:', error);
+     alert('Delete background video failed');
    }
  }
 
@@ -414,22 +463,28 @@
  window.loadAlbumsForManage = loadAlbumsForManage;
  window.saveSongChanges = saveSongChanges;
  window.deleteSong = deleteSong;
+ window.deleteSongBackground = deleteSongBackground;
  window.toggleAlbums = toggleAlbums;
  window.playRainLoop = playRainLoop;
  window.toggleBackgroundModal = toggleBackgroundModal;
  window.saveBackground = saveBackground;
  window.loadAlbumsForBackground = loadAlbumsForBackground;
- 
- function playCurrentSong() {
-   const data = currentSongList[currentIndex];
+
+ function setBackground(data) {
    const bgVideo = document.getElementById('background-video');
    if (bgVideo) {
-     if (bgVideo.src !== currentAlbumBackground) {
-       bgVideo.src = currentAlbumBackground;
+     const backgroundUrl = data.backgroundVideo || currentAlbumBackground;
+     if (bgVideo.src !== backgroundUrl) {
+       bgVideo.src = backgroundUrl;
        bgVideo.load();
+       bgVideo.play();
      }
-     bgVideo.play();
    }
+ }
+
+ function playCurrentSong() {
+   const data = currentSongList[currentIndex];
+   setBackground(data);
    const audio = document.getElementById('audio');
    if (audio) {
      audio.src = data.url;
