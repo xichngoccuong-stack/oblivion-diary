@@ -16,7 +16,7 @@
  let isAlbumsLoaded = false;
  let currentView = 'albums';
  let isRainPlaying = false;
- let currentAlbumBackground = 'https://res.cloudinary.com/dglxrlydv/video/upload/v1772435335/Background_qelwz8.mp4';
+ let currentAlbumBackground = 'videos/Background.mp4';
  let manageSongs = [];
 
  const cloudName = 'dglxrlydv';
@@ -141,7 +141,7 @@
      try {
          const albumDoc = await db.collection('albums').doc(albumId).get();
          const albumName = albumDoc.data().name;
-         currentAlbumBackground = albumDoc.data().background || 'https://res.cloudinary.com/dglxrlydv/video/upload/v1772435335/Background_qelwz8.mp4';
+         currentAlbumBackground = albumDoc.data().background || 'videos/Background.mp4';
          const bgVideo = document.getElementById('background-video');
          bgVideo.src = currentAlbumBackground;
          bgVideo.load();
