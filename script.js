@@ -16,7 +16,7 @@
  let isAlbumsLoaded = false;
  let currentView = 'albums';
  let isRainPlaying = false;
- let currentAlbumBackground = 'videos/Background.mp4';
+ let currentAlbumBackground = 'background.mp4';
  let manageSongs = [];
 
  const cloudName = 'dglxrlydv';
@@ -141,7 +141,7 @@
      try {
          const albumDoc = await db.collection('albums').doc(albumId).get();
          const albumName = albumDoc.data().name;
-         currentAlbumBackground = albumDoc.data().background || 'videos/Background.mp4';
+         currentAlbumBackground = albumDoc.data().background || 'background.mp4';
          const bgVideo = document.getElementById('background-video');
          bgVideo.src = currentAlbumBackground;
          bgVideo.load();
@@ -253,7 +253,7 @@
      const rainVideo = document.getElementById('rain-video');
      const button = document.getElementById('rain-button');
      if (!isRainPlaying) {
-         rainAudio.src = 'https://res.cloudinary.com/dglxrlydv/video/upload/v1772433226/Rain_hgxd9x.mp3';
+         rainAudio.src = 'rain.mp3';
          rainAudio.play();
          rainVideo.play();
          rainVideo.style.display = 'block';
