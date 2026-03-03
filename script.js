@@ -98,7 +98,10 @@
      const snapshot = await db.collection('albums').get();
      const select = document.getElementById('album-select');
      select.innerHTML = '<option value="">Select album</option>';
-     snapshot.forEach(doc => {
+     const docs = [];
+     snapshot.forEach(doc => docs.push(doc));
+     docs.sort((a, b) => a.data().name.localeCompare(b.data().name));
+     docs.forEach(doc => {
        const data = doc.data();
        const option = document.createElement('option');
        option.value = doc.id;
@@ -115,10 +118,13 @@
          const snapshot = await db.collection('albums').get();
          const albumItems = document.getElementById('album-items');
          albumItems.innerHTML = '';
-         snapshot.forEach(doc => {
+         const docs = [];
+         snapshot.forEach(doc => docs.push(doc));
+         docs.sort((a, b) => a.data().name.localeCompare(b.data().name));
+         docs.forEach(doc => {
              const data = doc.data();
              const p = document.createElement('p');
-             p.textContent = '✦ ' +data.name;
+             p.textContent = '✦ ' + data.name;
              p.style.color = 'white';
              p.style.cursor = 'pointer';
              p.style.fontFamily = "'Shalimar', cursive";
@@ -438,7 +444,10 @@
      const snapshot = await db.collection('albums').get();
      const select = document.getElementById('background-album-select');
      select.innerHTML = '<option value="">Select album</option>';
-     snapshot.forEach(doc => {
+     const docs = [];
+     snapshot.forEach(doc => docs.push(doc));
+     docs.sort((a, b) => a.data().name.localeCompare(b.data().name));
+     docs.forEach(doc => {
        const data = doc.data();
        const option = document.createElement('option');
        option.value = doc.id;
