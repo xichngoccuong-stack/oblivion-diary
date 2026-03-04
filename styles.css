@@ -96,6 +96,13 @@ button {
     z-index: 1;
 }
 
+#current-album-label {
+    display: none;
+    font-size: 24px;
+    color: orange;
+    font-family: 'Shalimar', cursive;
+}
+
 #audio-list {
     z-index: 1;
 }

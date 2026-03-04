@@ -187,6 +187,7 @@
                  const allP = document.querySelectorAll('#audio-items p');
                  allP.forEach(p => p.classList.remove('playing'));
                  p.classList.add('playing');
+                 updateAlbumLabel(); // Cập nhật label khi click play bài hát
              };
              audioItems.appendChild(p);
              index++;
@@ -521,6 +522,25 @@
    }
  }
 
+ function updateAlbumLabel() {
+   const label = document.getElementById('current-album-label');
+   const albumItems = document.getElementById('album-items');
+   const audio = document.getElementById('audio');
+   if (currentIndex >= 0 && currentSongList.length > 0 && albumItems.style.display === 'none' && audio && !audio.paused) {
+     const currentSong = currentSongList[currentIndex];
+     if (currentSong && currentSong.albumName) {
+       label.textContent = ` (${currentSong.albumName})`;
+       label.style.display = 'inline';
+     } else {
+       label.textContent = '';
+       label.style.display = 'none';
+     }
+   } else {
+     label.textContent = '';
+     label.style.display = 'none';
+   }
+ }
+
  function playCurrentSong() {
    const data = currentSongList[currentIndex];
    setBackground(data);
@@ -554,6 +574,7 @@
        }
        const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
        if (currentP) currentP.classList.add('playing');
+       updateAlbumLabel(); // Cập nhật label sau khi play thành công
      }).catch((e) => {
        console.error('Autoplay blocked: ' + e.message);
        const playPauseBtn = document.getElementById('play-pause-btn');
@@ -713,5 +734,11 @@
        }
        playCurrentSong();
      }
+   };
+   document.getElementById('audio').onpause = () => {
+     updateAlbumLabel(); // Cập nhật label khi pause
+   };
+   document.getElementById('audio').onplay = () => {
+     updateAlbumLabel(); // Cập nhật label khi play
    };
  };
