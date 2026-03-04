@@ -187,7 +187,7 @@
                  const allP = document.querySelectorAll('#audio-items p');
                  allP.forEach(p => p.classList.remove('playing'));
                  p.classList.add('playing');
-                 updateAlbumLabel(); // Cập nhật label khi click play bài hát
+                 updateAlbumLabel();
              };
              audioItems.appendChild(p);
              index++;
@@ -574,7 +574,7 @@
        }
        const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
        if (currentP) currentP.classList.add('playing');
-       updateAlbumLabel(); // Cập nhật label sau khi play thành công
+       updateAlbumLabel();
      }).catch((e) => {
        console.error('Autoplay blocked: ' + e.message);
        const playPauseBtn = document.getElementById('play-pause-btn');
@@ -632,9 +632,7 @@
        const albumName = albumDoc.data().name;
        data.albumName = albumName;
        data.backgroundVideo = albumDoc.data().background || 'background.mp4';
-       // Load the album's music list
        await loadMusicForAlbum(data.album);
-       // Set currentIndex to the searched song
        currentIndex = currentSongList.findIndex(song => song.name === data.name);
        setBackground(data);
        document.getElementById('audio').src = data.url;
@@ -661,7 +659,7 @@
        if (currentP) currentP.classList.add('playing');
        toggleSearchModal();
        showNotification('Playing: ' + data.name.replace('.mp3', ''));
-       updateAlbumLabel(); // Update album label
+       updateAlbumLabel();
      } else {
        showNotification('Song not found');
      }
@@ -672,14 +670,11 @@
  }
 
  window.onload = async function() {
-   // Load albums and album list
    loadAlbums();
    if (!isAlbumsLoaded) {
      await loadAlbumList();
      isAlbumsLoaded = true;
    }
-
-   // Set up event handlers for controls
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
        currentIndex--;
@@ -749,9 +744,9 @@
      }
    };
    document.getElementById('audio').onpause = () => {
-     updateAlbumLabel(); // Cập nhật label khi pause
+     updateAlbumLabel();
    };
    document.getElementById('audio').onplay = () => {
-     updateAlbumLabel(); // Cập nhật label khi play
+     updateAlbumLabel();
    };
  };
