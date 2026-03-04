@@ -570,6 +570,73 @@
    return `${min}:${sec.toString().padStart(2, '0')}`;
  }
 
+ function toggleSearchModal() {
+   const modal = document.getElementById('search-modal');
+   if (modal.style.display === 'block') {
+     modal.style.display = 'none';
+   } else {
+     modal.style.display = 'block';
+     loadAllMusicForSearch();
+   }
+ }
+
+ async function loadAllMusicForSearch() {
+   try {
+     const snapshot = await db.collection('music').get();
+     const datalist = document.getElementById('song-list-search');
+     datalist.innerHTML = '';
+     const docs = [];
+     snapshot.forEach(doc => docs.push(doc));
+     docs.sort((a, b) => a.data().name.localeCompare(b.data().name));
+     docs.forEach(doc => {
+       const data = doc.data();
+       const option = document.createElement('option');
+       option.value = data.name.replace('.mp3', '');
+       datalist.appendChild(option);
+     });
+   } catch (error) {
+     console.error('Load all music for search failed:', error);
+   }
+ }
+
+ async function searchAndPlaySong() {
+   const songName = document.getElementById('search-input').value.trim();
+   if (!songName) return;
+   try {
+     const snapshot = await db.collection('music').where('name', '>=', songName + '.mp3').where('name', '<=', songName + '.mp3\uf8ff').get();
+     if (!snapshot.empty) {
+       const doc = snapshot.docs[0];
+       const data = doc.data();
+       const albumDoc = await db.collection('albums').doc(data.album).get();
+       const albumName = albumDoc.data().name;
+       data.albumName = albumName;
+       data.backgroundVideo = albumDoc.data().background || 'background.mp4';
+       currentIndex = -1; // Not in currentSongList
+       setBackground(data);
+       document.getElementById('audio').src = data.url;
+       document.getElementById('audio').load();
+       document.getElementById('audio').play();
+       document.getElementById('song-name').style.display = 'block';
+       document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
+       if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
+         document.getElementById('song-name').style.fontFamily = "'Ma Shan Zheng', sans-serif";
+       } else {
+         document.getElementById('song-name').style.fontFamily = "'Shalimar', cursive";
+       }
+       document.getElementById('controls').style.display = 'block';
+       const allP = document.querySelectorAll('#audio-items p');
+       allP.forEach(p => p.classList.remove('playing'));
+       toggleSearchModal();
+       showNotification('Playing: ' + data.name.replace('.mp3', ''));
+     } else {
+       showNotification('Song not found');
+     }
+   } catch (error) {
+     console.error('Search and play song failed:', error);
+     showNotification('Error playing song');
+   }
+ }
+
  window.onload = async function() {
    // Load albums and album list
    loadAlbums();
