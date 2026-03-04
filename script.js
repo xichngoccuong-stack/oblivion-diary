@@ -632,11 +632,21 @@
        const albumName = albumDoc.data().name;
        data.albumName = albumName;
        data.backgroundVideo = albumDoc.data().background || 'background.mp4';
-       currentIndex = -1; // Not in currentSongList
+       // Load the album's music list
+       await loadMusicForAlbum(data.album);
+       // Set currentIndex to the searched song
+       currentIndex = currentSongList.findIndex(song => song.name === data.name);
        setBackground(data);
        document.getElementById('audio').src = data.url;
        document.getElementById('audio').load();
-       document.getElementById('audio').play();
+       document.getElementById('audio').play().then(() => {
+         const playPauseBtn = document.getElementById('play-pause-btn');
+         if (playPauseBtn) {
+           playPauseBtn.textContent = '❚❚';
+         }
+       }).catch((e) => {
+         console.error('Autoplay blocked: ' + e.message);
+       });
        document.getElementById('song-name').style.display = 'block';
        document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
        if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
@@ -647,8 +657,11 @@
        document.getElementById('controls').style.display = 'block';
        const allP = document.querySelectorAll('#audio-items p');
        allP.forEach(p => p.classList.remove('playing'));
+       const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
+       if (currentP) currentP.classList.add('playing');
        toggleSearchModal();
        showNotification('Playing: ' + data.name.replace('.mp3', ''));
+       updateAlbumLabel(); // Update album label
      } else {
        showNotification('Song not found');
      }
