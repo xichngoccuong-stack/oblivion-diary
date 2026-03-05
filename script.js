@@ -261,7 +261,7 @@
          rainVideo.play();
          rainVideo.style.display = 'block';
          isRainPlaying = true;
-         button.style.background = 'linear-gradient(to right, green, black)';
+         button.style.background = 'linear-gradient(to left, green, black)';
          button.style.color = 'white';
      } else {
          rainAudio.pause();
@@ -762,7 +762,7 @@
    document.getElementById('repeat-btn').onclick = () => {
      isRepeatMode = !isRepeatMode;
      if (isRepeatMode) {
-       document.getElementById('repeat-btn').style.background = 'linear-gradient(to right, green, black)';
+       document.getElementById('repeat-btn').style.background = 'linear-gradient(to left, green, black)';
        document.getElementById('repeat-btn').style.color = 'white';
      } else {
        document.getElementById('repeat-btn').style.background = '';

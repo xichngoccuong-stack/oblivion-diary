@@ -51,7 +51,7 @@ button {
     font-family: 'Shalimar', cursive;
     font-size: 30px;
     color: white;
-    background: linear-gradient(to right, #800000, #000000);
+    background: linear-gradient(to left, #800000, #000000);
     padding: 10px;
     border-radius: 5px;
     margin: 10px 0;
@@ -186,7 +186,8 @@ button {
 }
 
 .playing {
-    color: orange !important;
+    background: linear-gradient(to left, #800000, black) !important;
+    color: white !important;
 }
 
 #seek-bar {
