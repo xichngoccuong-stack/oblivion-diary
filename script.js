@@ -340,6 +340,8 @@
        document.querySelectorAll('.color-square').forEach(el => el.classList.remove('selected'));
        selectedSquare.classList.add('selected');
      }
+     const noteBold = doc.data().noteBold || false;
+     document.getElementById('note-bold-input').checked = noteBold;
    } catch (error) {
      console.error('Load note for song failed:', error);
      songNoteInput.value = '';
@@ -383,6 +385,7 @@
    const newAlbum = document.getElementById('album-move-select').value;
    const newNote = document.getElementById('song-note-input').value;
    const newNoteColor = document.getElementById('note-color-input').value;
+   const newNoteBold = document.getElementById('note-bold-input').checked;
    const file = document.getElementById('song-background-file-input').files[0];
    const updateData = {};
    if (newName) {
@@ -393,6 +396,7 @@
    }
    updateData.note = newNote;
    updateData.noteColor = newNoteColor;
+   updateData.noteBold = newNoteBold;
    if (file) {
      const url = await uploadSongBackgroundVideo(file);
      if (url) {
@@ -580,6 +584,7 @@
          if (note && note.trim()) {
            songNoteElement.textContent = note;
            songNoteElement.style.color = doc.data().noteColor || '#ffffff';
+           songNoteElement.style.fontWeight = doc.data().noteBold ? 'bold' : 'normal';
            songNoteElement.style.display = 'block';
          } else {
            songNoteElement.style.display = 'none';
