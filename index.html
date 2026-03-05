@@ -39,6 +39,7 @@
         <input type="text" id="song-input" list="song-list" placeholder="Select or search track" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
         <datalist id="song-list"></datalist>
         <input type="text" id="new-song-name" placeholder="New track name" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
+        <textarea id="song-note-input" placeholder="Edit note" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px; height: 100px; resize: vertical;"></textarea>
         <select id="album-move-select" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
           <option value="">Select an album to move to (optional)</option>
         </select>
@@ -76,13 +77,16 @@
       <p onclick="toggleManageModal()" style="margin: 5px 0 0 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Track management</p>
       <p onclick="toggleBackgroundModal()" style="margin: 5px 0 0 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Background settings</p>
     </div>
-    <div id="album-list" onclick="toggleAlbums()" style="background: transparent; color: white; padding: 10px; margin: 80px 10px 10px 10px; border: 2px solid white;">
-      <h3 style="font-family: 'Shalimar', cursive; font-size: 24px; cursor: pointer;">Album <span id="current-album-label"></span></h3>
-      <div id="album-items" onclick="event.stopPropagation()" style="display: block;"></div>
+    <div id="left-container" style="margin: 80px 10px 10px 10px;">
+      <div id="album-list" onclick="toggleAlbums()" style="background: transparent; color: white; padding: 10px; margin: 0; border: 2px solid white;">
+        <h3 style="font-family: 'Shalimar', cursive; font-size: 24px; cursor: pointer;">Album <span id="current-album-label"></span></h3>
+        <div id="album-items" onclick="event.stopPropagation()" style="display: block;"></div>
+      </div>
     </div>
+    <div id="song-note" style="display:none; background: transparent; color: white; padding: 10px; margin: 10px; border: none; font-family: 'Shalimar', cursive; font-size: 30px; max-height: 200px; overflow-y: auto; position: absolute; left: 25%; top: 80px;"></div>
     <div id="audio-list" style="display:none; background: transparent; color: white; padding: 10px; margin: 10px; border: 2px solid white; overflow-y: auto; max-height: 350px;">
-      <h3 style="font-family: 'Shalimar', cursive; font-size: 24px;">Tracks</h3>
-      <div id="audio-items"></div>
+       <h3 style="font-family: 'Shalimar', cursive; font-size: 24px;">Tracks</h3>
+       <div id="audio-items"></div>
     </div>
     <div id="controls" style="display:none; margin-top: 10px; color: white;">
       <button id="prev-btn" style="margin: 5px;">◁◁</button>

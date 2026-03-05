@@ -124,6 +124,20 @@ button {
     background: rgba(255, 255, 255, 0.7);
 }
 
+#song-note {
+    background: transparent;
+    color: white;
+    padding: 10px;
+    margin: 0 10px 10px 10px;
+    border: none;
+    font-family: 'Shalimar', cursive;
+    font-size: 30px;
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    z-index: 1;
+}
+
 #controls {
     background: transparent;
     color: white;

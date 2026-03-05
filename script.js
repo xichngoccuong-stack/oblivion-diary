@@ -157,6 +157,7 @@
          let index = 0;
          docs.forEach(doc => {
              const data = doc.data();
+             data.id = doc.id;
              data.albumName = albumName;
              currentSongList.push(data);
              const p = document.createElement('p');
@@ -188,6 +189,7 @@
                  allP.forEach(p => p.classList.remove('playing'));
                  p.classList.add('playing');
                  updateAlbumLabel();
+                 loadSongNote();
              };
              audioItems.appendChild(p);
              index++;
@@ -308,8 +310,32 @@
        option.value = data.name.replace('.mp3', '');
        datalist.appendChild(option);
      });
+     // Add event listener to load note when song is selected
+     document.getElementById('song-input').addEventListener('input', loadNoteForSelectedSong);
    } catch (error) {
      console.error('Load songs for manage failed:', error);
+   }
+ }
+
+ async function loadNoteForSelectedSong() {
+   const songNameInput = document.getElementById('song-input').value.trim();
+   const songNoteInput = document.getElementById('song-note-input');
+   if (!songNameInput) {
+     songNoteInput.value = '';
+     return;
+   }
+   const song = manageSongs.find(s => s.name.replace('.mp3', '') === songNameInput);
+   if (!song) {
+     songNoteInput.value = '';
+     return;
+   }
+   try {
+     const doc = await db.collection('music').doc(song.id).get();
+     const note = doc.data().note || '';
+     songNoteInput.value = note;
+   } catch (error) {
+     console.error('Load note for song failed:', error);
+     songNoteInput.value = '';
    }
  }
 
@@ -347,6 +373,7 @@
    const songId = song.id;
    const newName = document.getElementById('new-song-name').value.trim();
    const newAlbum = document.getElementById('album-move-select').value;
+   const newNote = document.getElementById('song-note-input').value.trim();
    const file = document.getElementById('song-background-file-input').files[0];
    const updateData = {};
    if (newName) {
@@ -355,6 +382,7 @@
    if (newAlbum) {
      updateData.album = newAlbum;
    }
+   updateData.note = newNote;
    if (file) {
      const url = await uploadSongBackgroundVideo(file);
      if (url) {
@@ -522,6 +550,32 @@
    }
  }
 
+ async function loadSongNote() {
+   const songNoteElement = document.getElementById('song-note');
+   if (currentIndex >= 0 && currentSongList.length > 0) {
+     const currentSong = currentSongList[currentIndex];
+     if (currentSong && currentSong.id) {
+       try {
+         const doc = await db.collection('music').doc(currentSong.id).get();
+         const note = doc.data().note;
+         if (note && note.trim()) {
+           songNoteElement.textContent = note;
+           songNoteElement.style.display = 'block';
+         } else {
+           songNoteElement.style.display = 'none';
+         }
+       } catch (error) {
+         console.error('Load song note failed:', error);
+         songNoteElement.style.display = 'none';
+       }
+     } else {
+       songNoteElement.style.display = 'none';
+     }
+   } else {
+     songNoteElement.style.display = 'none';
+   }
+ }
+
  function updateAlbumLabel() {
    const label = document.getElementById('current-album-label');
    const albumItems = document.getElementById('album-items');
@@ -575,6 +629,7 @@
        const currentP = document.querySelector(`#audio-items p[data-index="${currentIndex}"]`);
        if (currentP) currentP.classList.add('playing');
        updateAlbumLabel();
+       loadSongNote();
      }).catch((e) => {
        console.error('Autoplay blocked: ' + e.message);
        const playPauseBtn = document.getElementById('play-pause-btn');
@@ -628,6 +683,7 @@
      if (!snapshot.empty) {
        const doc = snapshot.docs[0];
        const data = doc.data();
+       data.id = doc.id;
        const albumDoc = await db.collection('albums').doc(data.album).get();
        const albumName = albumDoc.data().name;
        data.albumName = albumName;
@@ -660,6 +716,7 @@
        toggleSearchModal();
        showNotification('Playing: ' + data.name.replace('.mp3', ''));
        updateAlbumLabel();
+       loadSongNote();
      } else {
        showNotification('Song not found');
      }
