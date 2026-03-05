@@ -40,6 +40,21 @@
         <datalist id="song-list"></datalist>
         <input type="text" id="new-song-name" placeholder="New track name" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
         <textarea id="song-note-input" placeholder="Edit note" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px; height: 100px; resize: vertical;"></textarea>
+        <div id="color-picker" style="margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            <div class="color-square" data-color="#ffffff" style="background-color: #ffffff;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#000000" style="background-color: #000000;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#ff0000" style="background-color: #ff0000;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#00ff00" style="background-color: #00ff00;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#0000ff" style="background-color: #0000ff;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#ffff00" style="background-color: #ffff00;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#00ffff" style="background-color: #00ffff;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#ff00ff" style="background-color: #ff00ff;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#808080" style="background-color: #808080;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#ffa500" style="background-color: #ffa500;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#800080" style="background-color: #800080;" onclick="selectColor(this)"></div>
+            <div class="color-square" data-color="#a52a2a" style="background-color: #a52a2a;" onclick="selectColor(this)"></div>
+        </div>
+        <input type="hidden" id="note-color-input" value="#ffffff">
         <select id="album-move-select" style="margin: 10px; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%; max-width: 300px;">
           <option value="">Select an album to move to (optional)</option>
         </select>
@@ -83,7 +98,7 @@
         <div id="album-items" onclick="event.stopPropagation()" style="display: block;"></div>
       </div>
     </div>
-    <div id="song-note" style="display:none; background: transparent; color: white; padding: 10px; margin: 10px; border: none; font-family: 'Shalimar', cursive; font-size: 30px; max-height: 200px; overflow-y: auto; position: absolute; left: 25%; top: 80px;"></div>
+    <div id="song-note" style="display:none; background: transparent; color: inherit; padding: 10px; margin: 10px; border: none; font-family: 'Shalimar', cursive; font-size: 30px; max-height: 200px; overflow-y: auto; position: absolute; left: 25%; top: 80px;"></div>
     <div id="audio-list" style="display:none; background: transparent; color: white; padding: 10px; margin: 10px; border: 2px solid white; overflow-y: auto; max-height: 350px;">
        <h3 style="font-family: 'Shalimar', cursive; font-size: 24px;">Tracks</h3>
        <div id="audio-items"></div>

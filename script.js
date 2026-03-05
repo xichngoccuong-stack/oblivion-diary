@@ -333,9 +333,17 @@
      const doc = await db.collection('music').doc(song.id).get();
      const note = doc.data().note || '';
      songNoteInput.value = note;
+     const noteColor = doc.data().noteColor || '#ffffff';
+     document.getElementById('note-color-input').value = noteColor;
+     const selectedSquare = document.querySelector(`.color-square[data-color="${noteColor}"]`);
+     if (selectedSquare) {
+       document.querySelectorAll('.color-square').forEach(el => el.classList.remove('selected'));
+       selectedSquare.classList.add('selected');
+     }
    } catch (error) {
      console.error('Load note for song failed:', error);
      songNoteInput.value = '';
+     document.getElementById('note-color-input').value = '#ffffff';
    }
  }
 
@@ -373,7 +381,8 @@
    const songId = song.id;
    const newName = document.getElementById('new-song-name').value.trim();
    const newAlbum = document.getElementById('album-move-select').value;
-   const newNote = document.getElementById('song-note-input').value.trim();
+   const newNote = document.getElementById('song-note-input').value;
+   const newNoteColor = document.getElementById('note-color-input').value;
    const file = document.getElementById('song-background-file-input').files[0];
    const updateData = {};
    if (newName) {
@@ -383,6 +392,7 @@
      updateData.album = newAlbum;
    }
    updateData.note = newNote;
+   updateData.noteColor = newNoteColor;
    if (file) {
      const url = await uploadSongBackgroundVideo(file);
      if (url) {
@@ -538,6 +548,15 @@
  window.saveBackground = saveBackground;
  window.loadAlbumsForBackground = loadAlbumsForBackground;
 
+ function selectColor(element) {
+   const color = element.getAttribute('data-color');
+   document.querySelectorAll('.color-square').forEach(el => el.classList.remove('selected'));
+   element.classList.add('selected');
+   document.getElementById('note-color-input').value = color;
+ }
+
+ window.selectColor = selectColor;
+
  function setBackground(data) {
    const bgVideo = document.getElementById('background-video');
    if (bgVideo) {
@@ -560,6 +579,7 @@
          const note = doc.data().note;
          if (note && note.trim()) {
            songNoteElement.textContent = note;
+           songNoteElement.style.color = doc.data().noteColor || '#ffffff';
            songNoteElement.style.display = 'block';
          } else {
            songNoteElement.style.display = 'none';
