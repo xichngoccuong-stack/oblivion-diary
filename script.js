@@ -284,15 +284,16 @@
    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
  }
 
- function toggleManageModal() {
+ async function toggleManageModal() {
    const modal = document.getElementById('manage-modal');
    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
    if (modal.style.display === 'block') {
-     loadSongsForManage();
-     loadAlbumsForManage();
+     await loadSongsForManage();
+     await loadAlbumsForManage();
      if (currentIndex >= 0 && currentSongList.length > 0) {
        const currentSong = currentSongList[currentIndex];
        document.getElementById('song-input').value = currentSong.name.replace('.mp3', '');
+       await loadNoteForSelectedSong();
      }
    }
  }
