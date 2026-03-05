@@ -290,6 +290,10 @@
    if (modal.style.display === 'block') {
      loadSongsForManage();
      loadAlbumsForManage();
+     if (currentIndex >= 0 && currentSongList.length > 0) {
+       const currentSong = currentSongList[currentIndex];
+       document.getElementById('song-input').value = currentSong.name.replace('.mp3', '');
+     }
    }
  }
 
