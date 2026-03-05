@@ -67,6 +67,28 @@ button {
     z-index: 1;
 }
 
+#album-items {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#album-items::-webkit-scrollbar {
+    width: 10px;
+}
+
+#album-items::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#album-items::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+#album-items::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
 #current-album-label {
     display: none;
     font-size: 24px;
