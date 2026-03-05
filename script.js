@@ -176,7 +176,12 @@
                  setBackground(data);
                  document.getElementById('audio').src = data.url;
                  document.getElementById('audio').load();
-                 document.getElementById('audio').play();
+                 document.getElementById('audio').play().then(() => {
+                     const playPauseBtn = document.getElementById('play-pause-btn');
+                     if (playPauseBtn) {
+                         playPauseBtn.textContent = '❚❚';
+                     }
+                 });
                  document.getElementById('song-name').style.display = 'block';
                  document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
                  document.title = data.name.replace('.mp3', '');
