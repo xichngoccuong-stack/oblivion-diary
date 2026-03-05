@@ -529,7 +529,7 @@
    if (currentIndex >= 0 && currentSongList.length > 0 && albumItems.style.display === 'none' && audio && !audio.paused) {
      const currentSong = currentSongList[currentIndex];
      if (currentSong && currentSong.albumName) {
-       label.textContent = ` (${currentSong.albumName})`;
+       label.textContent = `- ${currentSong.albumName}`;
        label.style.display = 'inline';
      } else {
        label.textContent = '';
