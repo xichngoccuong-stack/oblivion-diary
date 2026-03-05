@@ -198,6 +198,11 @@ button {
     border-radius: 5px;
 }
 
+#current-time, #duration {
+    font-family: 'Comforter Brush', cursive;
+    font-size: 20px;
+}
+
 #seek-bar::-webkit-slider-track {
     background: transparent;
     height: 5px;
