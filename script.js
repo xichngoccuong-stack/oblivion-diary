@@ -179,6 +179,7 @@
                  document.getElementById('audio').play();
                  document.getElementById('song-name').style.display = 'block';
                  document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
+                 document.title = data.name.replace('.mp3', '');
                  if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
                      document.getElementById('song-name').style.fontFamily = "'Ma Shan Zheng', sans-serif";
                  } else {
@@ -636,6 +637,7 @@
      if (songNameElement) {
        songNameElement.style.display = 'block';
        songNameElement.textContent = data.name.replace('.mp3', '');
+       document.title = data.name.replace('.mp3', '');
        if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
          songNameElement.style.fontFamily = "'Ma Shan Zheng', sans-serif";
        } else {
@@ -705,6 +707,7 @@
        });
        document.getElementById('song-name').style.display = 'block';
        document.getElementById('song-name').textContent = data.name.replace('.mp3', '');
+       document.title = data.name.replace('.mp3', '');
        if (data.name.includes('黄昏-周传雄') || data.albumName === 'Nhạc Trung') {
          document.getElementById('song-name').style.fontFamily = "'Ma Shan Zheng', sans-serif";
        } else {
@@ -733,6 +736,11 @@
      await loadAlbumList();
      isAlbumsLoaded = true;
    }
+   const splashLogo = document.getElementById('splash-logo');
+   splashLogo.style.display = 'block';
+   setTimeout(() => {
+     splashLogo.style.display = 'none';
+   }, 3000);
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
        currentIndex--;
