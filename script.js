@@ -558,10 +558,10 @@
  window.loadAlbumsForBackground = loadAlbumsForBackground;
 
  function selectColor(element) {
-   const color = element.getAttribute('data-color');
-   document.querySelectorAll('.color-square').forEach(el => el.classList.remove('selected'));
-   element.classList.add('selected');
-   document.getElementById('note-color-input').value = color;
+     const color = element.getAttribute('data-color');
+     document.querySelectorAll('.color-square').forEach(el => el.classList.remove('selected'));
+     element.classList.add('selected');
+     document.getElementById('note-color-input').value = color;
  }
 
  window.selectColor = selectColor;
