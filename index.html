@@ -10,6 +10,7 @@
     <link rel="icon" type="image/x-icon" href="logo.ico">
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Shalimar&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comforter+Brush&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     </head>
 <body>
@@ -98,7 +99,7 @@
       </div>
     </div>
     <button onclick="toggleFunctionMenu()" style="position: absolute; top: 70px; right: 10px; background: transparent; border: none; font-size: 24px; cursor: pointer;">☰</button>
-    <button id="rain-button" onclick="playRainLoop()" style="position: absolute; top: 110px; right: 10px; background: transparent; border: none; font-size: 30px; cursor: pointer; font-family: 'Shalimar', cursive;">Raindrops</button>
+    <button id="rain-button" onclick="playRainLoop()" style="position: absolute; top: 110px; right: 10px; background: transparent; border: none; font-size: 24px; cursor: pointer; font-family: 'Comforter Brush', cursive;">Raindrops</button>
     <div id="function-menu" style="display: none; position: absolute; top: 110px; right: 10px; background: rgba(0,0,0,0.8); color: white; border: 2px solid white; border-radius: 5px; padding: 10px; z-index: 1000;">
       <p onclick="toggleUploadForm(); toggleFunctionMenu();" style="margin: 5px 0 0 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Add track/Create album</p>
       <p onclick="toggleManageModal(); toggleFunctionMenu();" style="margin: 5px 0 0 0; cursor: pointer; font-family: 'Shalimar', cursive; font-size: 24px;">● Track management</p>
@@ -106,20 +107,20 @@
     </div>
     <div id="left-container" style="margin: 80px 10px 10px 10px;">
       <div id="album-list" onclick="toggleAlbums()" style="background: transparent; color: white; padding: 10px; margin: 0; border: 2px solid white;">
-        <h3 style="font-family: 'Shalimar', cursive; font-size: 24px; cursor: pointer;">Album <span id="current-album-label"></span></h3>
+        <h3 style="font-family: 'Comforter Brush', cursive; font-size: 24px; cursor: pointer; font-weight: normal;">Album <span id="current-album-label"></span></h3>
         <div id="album-items" onclick="event.stopPropagation()" style="display: block;"></div>
       </div>
     </div>
     <div id="song-note" style="display:none; background: transparent; color: inherit; padding: 10px; margin: 10px; border: none; font-family: 'Shalimar', cursive; font-size: 30px; max-height: 200px; overflow-y: auto; position: absolute; left: 25%; top: 80px;"></div>
     <div id="audio-list" style="display:none; background: transparent; color: white; padding: 10px; margin: 10px; border: 2px solid white; overflow-y: auto; max-height: 350px;">
-       <h3 style="font-family: 'Shalimar', cursive; font-size: 24px;">Track</h3>
+       <h3 style="font-family: 'Comforter Brush', cursive; font-size: 24px; font-weight: normal;">Track</h3>
        <div id="audio-items"></div>
     </div>
     <div id="controls" style="display:none; margin-top: 10px; color: white;">
       <button id="prev-btn" style="margin: 5px;">◁◁</button>
       <button id="play-pause-btn" style="margin: 5px;">▶</button>
       <button id="next-btn" style="margin: 5px;">▷▷</button>
-      <button id="repeat-btn" style="margin: 5px; font-family: 'Shalimar', cursive; font-size: 30px;">Repeat this track</button>
+      <button id="repeat-btn" style="margin: 5px; font-family: 'Comforter Brush', cursive; font-size: 24px;">Repeat this track</button>
       <br>
       <input type="range" id="seek-bar" min="0" max="100" value="0" style="width: 200px; margin: 5px;">
       <span id="current-time">0:00</span> / <span id="duration">0:00</span>
