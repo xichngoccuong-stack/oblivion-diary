@@ -261,12 +261,14 @@
          rainVideo.play();
          rainVideo.style.display = 'block';
          isRainPlaying = true;
-         button.style.color = 'orange';
+         button.style.background = 'linear-gradient(to right, green, black)';
+         button.style.color = 'white';
      } else {
          rainAudio.pause();
          rainVideo.pause();
          rainVideo.style.display = 'none';
          isRainPlaying = false;
+         button.style.background = '';
          button.style.color = '';
      }
  }
@@ -760,11 +762,11 @@
    document.getElementById('repeat-btn').onclick = () => {
      isRepeatMode = !isRepeatMode;
      if (isRepeatMode) {
-       document.getElementById('repeat-btn').style.color = 'orange';
-       document.getElementById('repeat-btn').style.fontWeight = 'bold';
+       document.getElementById('repeat-btn').style.background = 'linear-gradient(to right, green, black)';
+       document.getElementById('repeat-btn').style.color = 'white';
      } else {
+       document.getElementById('repeat-btn').style.background = '';
        document.getElementById('repeat-btn').style.color = '';
-       document.getElementById('repeat-btn').style.fontWeight = 'normal';
      }
    };
    document.getElementById('seek-bar').oninput = (e) => {
