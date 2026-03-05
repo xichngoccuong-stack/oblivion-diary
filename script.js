@@ -315,7 +315,6 @@
        option.value = data.name.replace('.mp3', '');
        datalist.appendChild(option);
      });
-     // Add event listener to load note when song is selected
      document.getElementById('song-input').addEventListener('input', loadNoteForSelectedSong);
    } catch (error) {
      console.error('Load songs for manage failed:', error);
@@ -675,9 +674,6 @@
    const sec = Math.floor(seconds % 60);
    return `${min}:${sec.toString().padStart(2, '0')}`;
  }
-
-
-
 
  async function playSongFromManage() {
    const songName = document.getElementById('song-input').value.trim();

@@ -171,7 +171,6 @@ button {
     100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-
 #notification {
     position: fixed;
     top: 20px;
@@ -228,4 +227,3 @@ button {
     cursor: pointer;
     border: none;
 }
-
