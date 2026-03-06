@@ -745,7 +745,7 @@
    splashLogo.style.display = 'block';
    setTimeout(() => {
      splashLogo.style.display = 'none';
-   }, 3000);
+   }, 2000);
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
        currentIndex--;
