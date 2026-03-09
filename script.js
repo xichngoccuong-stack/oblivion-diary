@@ -736,16 +736,14 @@
  }
 
  window.onload = async function() {
-   loadAlbums();
+   const splashLogo = document.getElementById('splash-logo');
+   splashLogo.style.display = 'block';
+   await loadAlbums();
    if (!isAlbumsLoaded) {
      await loadAlbumList();
      isAlbumsLoaded = true;
    }
-   const splashLogo = document.getElementById('splash-logo');
-   splashLogo.style.display = 'block';
-   setTimeout(() => {
-     splashLogo.style.display = 'none';
-   }, 2000);
+   splashLogo.style.display = 'none';
    document.getElementById('prev-btn').onclick = () => {
      if (currentIndex > 0) {
        currentIndex--;
