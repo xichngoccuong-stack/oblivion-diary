@@ -444,6 +444,8 @@
    try {
      await db.collection('music').doc(songId).update(updateData);
      showNotification('Update successful');
+     document.getElementById('song-background-file-input').value = '';
+     document.getElementById('song-replace-file-input').value = '';
      toggleManageModal();
      if (isAlbumsLoaded) loadAlbumList();
      if (newAlbum) {
