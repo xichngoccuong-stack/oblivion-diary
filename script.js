@@ -398,7 +398,8 @@
    const newNote = document.getElementById('song-note-input').value;
    const newNoteColor = document.getElementById('note-color-input').value;
    const newNoteBold = document.getElementById('note-bold-input').checked;
-   const file = document.getElementById('song-background-file-input').files[0];
+   const backgroundFile = document.getElementById('song-background-file-input').files[0];
+   const replaceFile = document.getElementById('song-replace-file-input').files[0];
    const updateData = {};
    if (newName) {
      updateData.name = newName + '.mp3';
@@ -409,10 +410,31 @@
    updateData.note = newNote;
    updateData.noteColor = newNoteColor;
    updateData.noteBold = newNoteBold;
-   if (file) {
-     const url = await uploadSongBackgroundVideo(file);
+   if (backgroundFile) {
+     const url = await uploadSongBackgroundVideo(backgroundFile);
      if (url) {
        updateData.backgroundVideo = url;
+     }
+   }
+   if (replaceFile) {
+     document.getElementById('overlay').style.display = 'block';
+     const formData = new FormData();
+     formData.append('file', replaceFile);
+     formData.append('upload_preset', uploadPreset);
+     try {
+       const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+         method: 'POST',
+         body: formData
+       });
+       const data = await response.json();
+       const newUrl = data.secure_url;
+       updateData.url = newUrl;
+       document.getElementById('overlay').style.display = 'none';
+     } catch (error) {
+       document.getElementById('overlay').style.display = 'none';
+       console.error('Upload replace file failed:', error);
+       alert('Upload replace file failed');
+       return;
      }
    }
    if (Object.keys(updateData).length === 0 && !file) {
